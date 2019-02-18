@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response>
+    <transaction>
+        <amount>0.50</amount>
+        <currency>USD</currency>
+        <id>2451071245</id>
+        <status>2</status>
+        <status_msg>processed</status_msg>
+    </transaction>
+</response>

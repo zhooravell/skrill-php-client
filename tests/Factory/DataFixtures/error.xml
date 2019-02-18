@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+    <error>
+        <error_msg>MISSING_AMOUNT</error_msg>
+    </error>
+</response>
