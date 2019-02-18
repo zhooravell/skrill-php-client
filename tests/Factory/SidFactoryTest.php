@@ -25,7 +25,11 @@ class SidFactoryTest extends TestCase
         $now = new \DateTime();
         $diff = $now->diff($sid->getExpirationTillDateTime());
 
-        self::assertEquals(14, $diff->i);
-        self::assertEquals(59, $diff->s);
+        if (version_compare(PHP_VERSION, '7.2.0') >= 0) {
+            self::assertEquals(14, $diff->i);
+            self::assertEquals(59, $diff->s);
+        } else {
+            self::assertEquals(15, $diff->i);
+        }
     }
 }

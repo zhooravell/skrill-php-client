@@ -40,7 +40,7 @@ final class Sid
     /**
      * @return \DateTimeImmutable
      */
-    public function getExpirationTillDateTime()
+    public function getExpirationTillDateTime(): \DateTimeImmutable
     {
         return $this->expirationTillDateTime;
     }

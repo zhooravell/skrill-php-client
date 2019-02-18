@@ -81,11 +81,6 @@ class SkrillClientPrepareSaleTest extends TestCase
 
         $sid = $client->prepareSale($request);
 
-        $now = new \DateTime();
-        $diff = $now->diff($sid->getExpirationTillDateTime());
-
-        self::assertEquals(14, $diff->i);
-        self::assertEquals(59, $diff->s);
         self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', (string) $sid);
     }
 
