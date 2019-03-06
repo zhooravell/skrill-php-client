@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Skrill\ValueObject;
 
 use Skrill\ValueObject\Traits\ValueToStringTrait;
-use Skrill\Exception\InvalidTransactionIdException;
+use Skrill\Exception\InvalidTransactionIDException;
 
 /**
  * Value object for transaction id (transaction_id or mb_transaction_id).
@@ -20,14 +20,14 @@ final class TransactionID
     /**
      * @param string|int $value
      *
-     * @throws InvalidTransactionIdException
+     * @throws InvalidTransactionIDException
      */
     public function __construct($value)
     {
         $value = trim(strval($value));
 
         if (empty($value)) {
-            throw InvalidTransactionIdException::emptyTransactionId();
+            throw InvalidTransactionIDException::emptyTransactionID();
         }
 
         $this->value = $value;

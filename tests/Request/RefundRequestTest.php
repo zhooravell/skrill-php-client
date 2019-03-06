@@ -17,7 +17,7 @@ use Skrill\ValueObject\TransactionID;
 class RefundRequestTest extends TestCase
 {
     /**
-     * @throws \Skrill\Exception\InvalidTransactionIdException
+     * @throws \Skrill\Exception\InvalidTransactionIDException
      * @throws \Skrill\Exception\InvalidUrlException
      */
     public function testSuccess()
@@ -43,7 +43,7 @@ class RefundRequestTest extends TestCase
     }
 
     /**
-     * @throws \Skrill\Exception\InvalidTransactionIdException
+     * @throws \Skrill\Exception\InvalidTransactionIDException
      * @throws \Skrill\Exception\InvalidUrlException
      */
     public function testPartialSuccess()

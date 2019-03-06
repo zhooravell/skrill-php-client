@@ -45,8 +45,8 @@ class SkrillClientPrepareOnDemandTest extends TestCase
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Skrill\Exception\InvalidEmailException
      * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidRecurringPaymentIdException
-     * @throws \Skrill\Exception\InvalidTransactionIdException
+     * @throws \Skrill\Exception\InvalidRecurringPaymentIDException
+     * @throws \Skrill\Exception\InvalidTransactionIDException
      * @throws \Skrill\Exception\SkrillException
      * @throws \Exception
      */
@@ -70,8 +70,8 @@ class SkrillClientPrepareOnDemandTest extends TestCase
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Skrill\Exception\InvalidEmailException
      * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidRecurringPaymentIdException
-     * @throws \Skrill\Exception\InvalidTransactionIdException
+     * @throws \Skrill\Exception\InvalidRecurringPaymentIDException
+     * @throws \Skrill\Exception\InvalidTransactionIDException
      * @throws \Skrill\Exception\SkrillException
      */
     public function testPrepareOnDemandFail()
@@ -94,8 +94,8 @@ class SkrillClientPrepareOnDemandTest extends TestCase
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Skrill\Exception\InvalidEmailException
      * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidRecurringPaymentIdException
-     * @throws \Skrill\Exception\InvalidTransactionIdException
+     * @throws \Skrill\Exception\InvalidRecurringPaymentIDException
+     * @throws \Skrill\Exception\InvalidTransactionIDException
      * @throws \Skrill\Exception\SkrillException
      */
     public function testPrepareOnDemandCheckFormParams()

@@ -44,7 +44,7 @@ class SkrillClientPrepareRefundTest extends TestCase
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Skrill\Exception\InvalidEmailException
      * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidTransactionIdException
+     * @throws \Skrill\Exception\InvalidTransactionIDException
      * @throws \Skrill\Exception\SkrillException
      * @throws \Exception
      */
@@ -66,7 +66,7 @@ class SkrillClientPrepareRefundTest extends TestCase
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Skrill\Exception\InvalidEmailException
      * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidTransactionIdException
+     * @throws \Skrill\Exception\InvalidTransactionIDException
      * @throws \Skrill\Exception\SkrillException
      */
     public function testPrepareTransferFail()
@@ -87,7 +87,7 @@ class SkrillClientPrepareRefundTest extends TestCase
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Skrill\Exception\InvalidEmailException
      * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidTransactionIdException
+     * @throws \Skrill\Exception\InvalidTransactionIDException
      * @throws \Skrill\Exception\SkrillException
      */
     public function testPrepareTransferCheckFormParams()

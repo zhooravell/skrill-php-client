@@ -21,7 +21,7 @@ class MD5SignatureCalculatorTest extends TestCase
     /**
      * @throws \Skrill\Exception\InvalidSecretWordException
      * @throws \Skrill\Exception\InvalidSignatureException
-     * @throws \Skrill\Exception\InvalidTransactionIdException
+     * @throws \Skrill\Exception\InvalidTransactionIDException
      */
     public function testCalculateMethod()
     {

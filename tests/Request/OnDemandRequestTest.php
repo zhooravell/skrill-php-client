@@ -20,8 +20,8 @@ use Skrill\ValueObject\RecurringPaymentID;
 class OnDemandRequestTest extends TestCase
 {
     /**
-     * @throws \Skrill\Exception\InvalidRecurringPaymentIdException
-     * @throws \Skrill\Exception\InvalidTransactionIdException
+     * @throws \Skrill\Exception\InvalidRecurringPaymentIDException
+     * @throws \Skrill\Exception\InvalidTransactionIDException
      * @throws \Skrill\Exception\InvalidUrlException
      */
     public function testSuccess()

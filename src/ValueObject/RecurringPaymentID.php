@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Skrill\ValueObject;
 
 use Skrill\ValueObject\Traits\ValueToStringTrait;
-use Skrill\Exception\InvalidRecurringPaymentIdException;
+use Skrill\Exception\InvalidRecurringPaymentIDException;
 
 /**
  * Value object for Skrill recurring payment id (rec_payment_id).
@@ -19,14 +19,14 @@ final class RecurringPaymentID
     /**
      * @param string $value
      *
-     * @throws InvalidRecurringPaymentIdException
+     * @throws InvalidRecurringPaymentIDException
      */
     public function __construct(string $value)
     {
         $value = trim($value);
 
         if (empty($value)) {
-            throw InvalidRecurringPaymentIdException::emptyTransactionId();
+            throw InvalidRecurringPaymentIDException::emptyTransactionID();
         }
 
         $this->value = $value;

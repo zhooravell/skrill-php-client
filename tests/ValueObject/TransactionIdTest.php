@@ -6,7 +6,7 @@ namespace Skrill\Tests\ValueObject;
 
 use PHPUnit\Framework\TestCase;
 use Skrill\ValueObject\TransactionID;
-use Skrill\Exception\InvalidTransactionIdException;
+use Skrill\Exception\InvalidTransactionIDException;
 
 /**
  * Class TransactionIdTest.
@@ -14,7 +14,7 @@ use Skrill\Exception\InvalidTransactionIdException;
 class TransactionIdTest extends TestCase
 {
     /**
-     * @throws InvalidTransactionIdException
+     * @throws InvalidTransactionIDException
      */
     public function testSuccess()
     {
@@ -25,11 +25,11 @@ class TransactionIdTest extends TestCase
     }
 
     /**
-     * @throws InvalidTransactionIdException
+     * @throws InvalidTransactionIDException
      */
     public function testEmptyValue()
     {
-        self::expectException(InvalidTransactionIdException::class);
+        self::expectException(InvalidTransactionIDException::class);
         self::expectExceptionMessage('Skrill transaction ID should not be blank.');
 
         new TransactionID(' ');

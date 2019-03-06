@@ -20,7 +20,7 @@ class TransferRequestTest extends TestCase
     /**
      * @throws \Skrill\Exception\InvalidDescriptionException
      * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidTransactionIdException
+     * @throws \Skrill\Exception\InvalidTransactionIDException
      */
     public function testSuccess()
     {

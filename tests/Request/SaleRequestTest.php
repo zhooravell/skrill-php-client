@@ -25,7 +25,7 @@ class SaleRequestTest extends TestCase
      * @throws \Skrill\Exception\InvalidEmailException
      * @throws \Skrill\Exception\InvalidLangException
      * @throws \Skrill\Exception\InvalidRecurringBillingNoteException
-     * @throws \Skrill\Exception\InvalidTransactionIdException
+     * @throws \Skrill\Exception\InvalidTransactionIDException
      * @throws \Skrill\Exception\InvalidUrlException
      */
     public function testSuccess()
