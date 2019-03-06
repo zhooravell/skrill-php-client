@@ -8,7 +8,7 @@ use Skrill\ValueObject\Traits\ValueToStringTrait;
 use Skrill\Exception\InvalidRecurringBillingNoteException;
 
 /**
- * Class RecurringBillingNote.
+ * Value object for Skrill On demand node (ondemand_note).
  */
 final class RecurringBillingNote
 {
