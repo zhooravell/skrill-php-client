@@ -17,7 +17,7 @@ use Money\Parser\DecimalMoneyParser;
 use Skrill\ValueObject\TransactionID;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
-use Skrill\ValueObject\RecurringPaymentId;
+use Skrill\ValueObject\RecurringPaymentID;
 use PHPUnit\Framework\MockObject\MockObject;
 use Skrill\Exception\SkrillResponseException;
 
@@ -56,7 +56,7 @@ class SkrillClientPrepareOnDemandTest extends TestCase
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
         $request = new OnDemandRequest(
-            new RecurringPaymentId('111'),
+            new RecurringPaymentID('111'),
             new TransactionID(22),
             $this->parser->parse('10', 'EUR')
         );
@@ -82,7 +82,7 @@ class SkrillClientPrepareOnDemandTest extends TestCase
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
         $request = new OnDemandRequest(
-            new RecurringPaymentId('111'),
+            new RecurringPaymentID('111'),
             new TransactionID(22),
             $this->parser->parse('10', 'EUR')
         );
@@ -141,7 +141,7 @@ class SkrillClientPrepareOnDemandTest extends TestCase
         ;
 
         $request = new OnDemandRequest(
-            new RecurringPaymentId($recurringPaymentId),
+            new RecurringPaymentID($recurringPaymentId),
             new TransactionID($transactionId),
             $this->parser->parse(strval($amount), 'EUR')
         );

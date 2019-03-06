@@ -12,7 +12,7 @@ use Skrill\Exception\InvalidRecurringPaymentIdException;
  *
  * @see https://www.skrill.com/fileadmin/content/pdf/Skrill_Wallet_Checkout_Guide.pdf
  */
-final class RecurringPaymentId
+final class RecurringPaymentID
 {
     use ValueToStringTrait;
 

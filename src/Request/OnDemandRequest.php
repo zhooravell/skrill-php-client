@@ -8,7 +8,7 @@ use Money\Money;
 use Skrill\ValueObject\Url;
 use Skrill\ValueObject\TransactionID;
 use Skrill\Request\Traits\GetPayloadTrait;
-use Skrill\ValueObject\RecurringPaymentId;
+use Skrill\ValueObject\RecurringPaymentID;
 use Skrill\Request\Traits\AmountFormatterTrait;
 
 /**
@@ -20,11 +20,11 @@ final class OnDemandRequest
     use AmountFormatterTrait;
 
     /**
-     * @param RecurringPaymentId $paymentId
+     * @param RecurringPaymentID $paymentId
      * @param TransactionID      $transactionId
      * @param Money              $amount
      */
-    public function __construct(RecurringPaymentId $paymentId, TransactionID $transactionId, Money $amount)
+    public function __construct(RecurringPaymentID $paymentId, TransactionID $transactionId, Money $amount)
     {
         $this->payload = [
             'frn_trn_id' => strval($transactionId),

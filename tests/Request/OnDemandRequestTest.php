@@ -12,7 +12,7 @@ use Skrill\ValueObject\Url;
 use PHPUnit\Framework\TestCase;
 use Skrill\Request\OnDemandRequest;
 use Skrill\ValueObject\TransactionID;
-use Skrill\ValueObject\RecurringPaymentId;
+use Skrill\ValueObject\RecurringPaymentID;
 
 /**
  * Class OnDemandRequestTest.
@@ -29,7 +29,7 @@ class OnDemandRequestTest extends TestCase
         $parser = new DecimalMoneyParser(new ISOCurrencies());
 
         $request = new OnDemandRequest(
-            new RecurringPaymentId('222'),
+            new RecurringPaymentID('222'),
             new TransactionID(111),
             $parser->parse('1000000.51', 'EUR')
         );

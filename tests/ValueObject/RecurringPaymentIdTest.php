@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Skrill\Tests\ValueObject;
 
 use PHPUnit\Framework\TestCase;
-use Skrill\ValueObject\RecurringPaymentId;
+use Skrill\ValueObject\RecurringPaymentID;
 use Skrill\Exception\InvalidRecurringPaymentIdException;
 
 /**
@@ -19,7 +19,7 @@ class RecurringPaymentIdTest extends TestCase
     public function testSuccess()
     {
         $value = 'test123';
-        $authKey = new RecurringPaymentId($value);
+        $authKey = new RecurringPaymentID($value);
 
         self::assertEquals($value, (string) $authKey);
     }
@@ -32,6 +32,6 @@ class RecurringPaymentIdTest extends TestCase
         self::expectException(InvalidRecurringPaymentIdException::class);
         self::expectExceptionMessage('Skrill recurring payment ID should not be blank.');
 
-        new RecurringPaymentId(' ');
+        new RecurringPaymentID(' ');
     }
 }
