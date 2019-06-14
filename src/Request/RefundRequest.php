@@ -40,7 +40,7 @@ final class RefundRequest
      *
      * @return $this
      */
-    public function setStatusUrl(Url $url)
+    public function setStatusUrl(Url $url): self
     {
         $this->payload['refund_status_url'] = strval($url);
 

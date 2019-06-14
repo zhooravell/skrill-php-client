@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Skrill\Exception;
 
+use Exception;
 use Skrill\ValueObject\SecretWord;
 
 /**
  * Class InvalidSecretWordException.
  */
-final class InvalidSecretWordException extends \Exception implements SkrillException
+final class InvalidSecretWordException extends Exception implements SkrillException
 {
     /**
      * @return InvalidSecretWordException
      */
-    public static function emptySecretWord()
+    public static function emptySecretWord(): self
     {
         return new self('Skrill secret word should not be blank.');
     }
@@ -22,7 +23,7 @@ final class InvalidSecretWordException extends \Exception implements SkrillExcep
     /**
      * @return InvalidSecretWordException
      */
-    public static function invalidMaxLength()
+    public static function invalidMaxLength(): self
     {
         return new self(sprintf('The length of Skrill secret word should not exceed %d characters.', SecretWord::MAX_LENGTH));
     }
@@ -30,7 +31,7 @@ final class InvalidSecretWordException extends \Exception implements SkrillExcep
     /**
      * @return InvalidSecretWordException
      */
-    public static function specialCharacters()
+    public static function specialCharacters(): self
     {
         return new self('Special characters are not permitted in Skrill secret word.');
     }

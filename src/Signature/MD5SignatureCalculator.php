@@ -25,6 +25,7 @@ final class MD5SignatureCalculator implements SignatureCalculator
      * @var
      */
     private $merchantId;
+
     /**
      * @var MoneyFormatter
      */
@@ -45,7 +46,7 @@ final class MD5SignatureCalculator implements SignatureCalculator
     /**
      * {@inheritdoc}
      */
-    public function calculate(TransactionID $transactionId, Money $amount, int $status)
+    public function calculate(TransactionID $transactionId, Money $amount, int $status): Signature
     {
         return new Signature(strtoupper(md5(implode([
             $this->merchantId->getValue(),

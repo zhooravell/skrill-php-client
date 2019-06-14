@@ -68,7 +68,7 @@ final class Response
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @return mixed
      */

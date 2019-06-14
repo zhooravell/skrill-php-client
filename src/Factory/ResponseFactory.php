@@ -63,7 +63,7 @@ final class ResponseFactory
      *
      * @throws SkrillResponseException
      */
-    private static function responseToXML(ResponseInterface $response)
+    private static function responseToXML(ResponseInterface $response): SimpleXMLElement
     {
         $xml = new SimpleXMLElement($response->getBody()->getContents());
 

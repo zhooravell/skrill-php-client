@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Skrill\ValueObject;
 
+use DateTimeImmutable;
 use Skrill\Exception\InvalidSidException;
 use Skrill\ValueObject\Traits\ValueToStringTrait;
 
@@ -15,17 +16,17 @@ final class Sid
     use ValueToStringTrait;
 
     /**
-     * @var \DateTimeImmutable
+     * @var DateTimeImmutable
      */
     private $expirationTillDateTime;
 
     /**
-     * @param string             $value
-     * @param \DateTimeImmutable $expirationTillDateTime
+     * @param string            $value
+     * @param DateTimeImmutable $expirationTillDateTime
      *
      * @throws InvalidSidException
      */
-    public function __construct(string $value, \DateTimeImmutable $expirationTillDateTime)
+    public function __construct(string $value, DateTimeImmutable $expirationTillDateTime)
     {
         $value = trim($value);
 
@@ -38,9 +39,9 @@ final class Sid
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return DateTimeImmutable
      */
-    public function getExpirationTillDateTime(): \DateTimeImmutable
+    public function getExpirationTillDateTime(): DateTimeImmutable
     {
         return $this->expirationTillDateTime;
     }

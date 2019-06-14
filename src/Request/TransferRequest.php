@@ -42,7 +42,7 @@ final class TransferRequest
      *
      * @return $this
      */
-    public function setReferenceTransaction(TransactionID $transactionId)
+    public function setReferenceTransaction(TransactionID $transactionId): self
     {
         $this->payload['frn_trn_id'] = strval($transactionId);
 

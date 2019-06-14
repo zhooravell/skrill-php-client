@@ -45,7 +45,7 @@ final class SHA2SignatureCalculator implements SignatureCalculator
     /**
      * {@inheritdoc}
      */
-    public function calculate(TransactionID $transactionId, Money $amount, int $status)
+    public function calculate(TransactionID $transactionId, Money $amount, int $status): Signature
     {
         return new Signature(strtoupper(hash('sha256', implode([
             $this->merchantId->getValue(),

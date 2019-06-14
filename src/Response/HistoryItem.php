@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Skrill\Response;
 
+use DateTimeInterface;
+
 /**
  * Class HistoryItem.
  */
@@ -20,7 +22,7 @@ final class HistoryItem
     private $skrillId;
 
     /**
-     * @var \DateTimeInterface
+     * @var DateTimeInterface
      */
     private $time;
 
@@ -77,7 +79,7 @@ final class HistoryItem
     /**
      * @param $reference
      * @param $skrillId
-     * @param \DateTimeInterface $time
+     * @param DateTimeInterface $time
      * @param $type
      * @param $details
      * @param $lesion
@@ -92,7 +94,7 @@ final class HistoryItem
     public function __construct(
         $reference,
         $skrillId,
-        \DateTimeInterface $time,
+        DateTimeInterface $time,
         $type,
         $details,
         $lesion,
@@ -208,7 +210,7 @@ final class HistoryItem
     }
 
     /**
-     * @return \DateTimeInterface
+     * @return DateTimeInterface
      */
     public function getTime()
     {

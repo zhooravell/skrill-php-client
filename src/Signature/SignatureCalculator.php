@@ -25,5 +25,5 @@ interface SignatureCalculator
      *
      * @throws InvalidSignatureException
      */
-    public function calculate(TransactionID $transactionId, Money $amount, int $status);
+    public function calculate(TransactionID $transactionId, Money $amount, int $status): Signature;
 }

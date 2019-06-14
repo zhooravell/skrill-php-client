@@ -40,7 +40,7 @@ final class SaleRequest
      *
      * @return SaleRequest
      */
-    public function setLang(Language $lang)
+    public function setLang(Language $lang): self
     {
         $this->payload['language'] = strval($lang);
 
@@ -52,7 +52,7 @@ final class SaleRequest
      *
      * @return SaleRequest
      */
-    public function setPayFromEmail(Email $email)
+    public function setPayFromEmail(Email $email): self
     {
         $this->payload['pay_from_email'] = strval($email);
 
@@ -72,7 +72,7 @@ final class SaleRequest
      *
      * @return SaleRequest
      */
-    public function setProductDescription(Description $productDescription)
+    public function setProductDescription(Description $productDescription): self
     {
         $this->payload['detail1_description'] = $productDescription->getSubject();
         $this->payload['detail1_text'] = $productDescription->getText();
@@ -85,7 +85,7 @@ final class SaleRequest
      *
      * @return $this
      */
-    public function setReturnUrl(Url $url)
+    public function setReturnUrl(Url $url): self
     {
         $this->payload['return_url'] = strval($url);
 
@@ -97,7 +97,7 @@ final class SaleRequest
      *
      * @return $this
      */
-    public function setCancelUrl(Url $url)
+    public function setCancelUrl(Url $url): self
     {
         $this->payload['cancel_url'] = strval($url);
 
@@ -109,7 +109,7 @@ final class SaleRequest
      *
      * @return $this
      */
-    public function setStatusUrl(Url $url)
+    public function setStatusUrl(Url $url): self
     {
         $this->payload['status_url'] = strval($url);
 
@@ -122,7 +122,7 @@ final class SaleRequest
      *
      * @return $this
      */
-    public function enableRecurringBilling(RecurringBillingNote $note, Money $money)
+    public function enableRecurringBilling(RecurringBillingNote $note, Money $money): self
     {
         $this->payload['ondemand_max_amount'] = $this->formatToFloat($money);
         $this->payload['ondemand_max_currency'] = strval($money->getCurrency());

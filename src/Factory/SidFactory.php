@@ -36,7 +36,7 @@ final class SidFactory
      * @throws InvalidSidException
      * @throws SkrillResponseException
      */
-    public static function createFromXMLResponse(ResponseInterface $response)
+    public static function createFromXMLResponse(ResponseInterface $response): Sid
     {
         $xml = new \SimpleXMLElement($response->getBody()->getContents());
 
@@ -55,7 +55,7 @@ final class SidFactory
      * @throws InvalidSidException
      * @throws SkrillResponseException
      */
-    public static function createFromSaleResponse(ResponseInterface $response)
+    public static function createFromSaleResponse(ResponseInterface $response): Sid
     {
         $content = $response->getBody()->getContents();
         $result = json_decode($content);

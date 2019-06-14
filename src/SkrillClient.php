@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Skrill;
 
 use ArrayObject;
+use LimitIterator;
+use SplFileObject;
+use DateTimeInterface;
 use Skrill\ValueObject\Sid;
 use Skrill\ValueObject\Url;
 use Skrill\ValueObject\Email;
@@ -205,7 +208,7 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
      *
      * @throws GuzzleException
      */
-    public function viewHistory(\DateTimeInterface $startDate, \DateTimeInterface $endDate = null): ArrayObject
+    public function viewHistory(DateTimeInterface $startDate, DateTimeInterface $endDate = null): ArrayObject
     {
         $params = [
             'email' => strval($this->merchantEmail),
@@ -218,7 +221,7 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
             $params['end_date'] = $endDate->format('d-m-y');
         }
 
-        $tmpFile = new \SplFileObject(tempnam(sys_get_temp_dir(), strval(rand())), 'w+');
+        $tmpFile = new SplFileObject(tempnam(sys_get_temp_dir(), strval(rand())), 'w+');
 
         $this->client->request('POST', 'https://www.skrill.com/app/query.pl', [
             RequestOptions::FORM_PARAMS => $params,
@@ -230,8 +233,8 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
         }
         $result = new ArrayObject();
         $tmpFile->rewind();
-        $tmpFile->setFlags(\SplFileObject::READ_CSV | \SplFileObject::READ_AHEAD | \SplFileObject::SKIP_EMPTY);
-        $it = new \LimitIterator($tmpFile, 1);
+        $tmpFile->setFlags(SplFileObject::READ_CSV | SplFileObject::READ_AHEAD | SplFileObject::SKIP_EMPTY);
+        $it = new LimitIterator($tmpFile, 1);
 
         foreach ($it as $row) {
             list($id, $time, $type, $details, $lesion, $profit, $status, $balance, $reference, $amount, $currency, $info, $skrillId, $paymentType) = $row;

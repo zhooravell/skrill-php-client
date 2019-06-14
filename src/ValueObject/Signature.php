@@ -41,7 +41,7 @@ final class Signature
      *
      * @return bool
      */
-    public function equalToString($string)
+    public function equalToString($string): bool
     {
         return $string == strval($this->value);
     }
