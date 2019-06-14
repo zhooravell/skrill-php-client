@@ -16,7 +16,7 @@ final class InvalidUrlException extends Exception implements SkrillException
      *
      * @return InvalidUrlException
      */
-    public static function invalidUrl($url): self
+    public static function invalidUrl(string $url): self
     {
         return new self(sprintf('"%s" is not a valid url.', $url));
     }

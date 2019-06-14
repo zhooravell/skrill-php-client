@@ -223,7 +223,6 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
         }
 
         $tmpFile = new SplFileObject(tempnam(sys_get_temp_dir(), strval(rand())), 'w+');
-
         $this->client->request('POST', 'https://www.skrill.com/app/query.pl', [
             RequestOptions::FORM_PARAMS => $params,
             RequestOptions::SINK => $tmpFile->getPathname(),
@@ -232,37 +231,22 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
         if (preg_match('/^[\d]{3}[\t]{2}(.+)$/', $tmpFile->current(), $matches)) {
             throw SkrillResponseException::fromSkillError($matches[1]);
         }
+
         $result = new ArrayObject();
         $tmpFile->rewind();
         $tmpFile->setFlags(SplFileObject::READ_CSV | SplFileObject::READ_AHEAD | SplFileObject::SKIP_EMPTY);
-        $it = new LimitIterator($tmpFile, 1);
 
-        foreach ($it as $row) {
-            list($id, $time, $type, $details, $lesion, $profit, $status, $balance, $reference, $amount, $currency, $info, $skrillId, $paymentType) = $row;
-
+        foreach (new LimitIterator($tmpFile, 1) as $row) {
+            list(, $time, $type, $details, $lesion, $profit, $status, $balance, $reference, $amount, $currency, $info, $skrillId, $paymentType) = $row;
             $datetime = DateTimeImmutable::createFromFormat('d M y H:i', $time);
 
             if (!$datetime instanceof DateTimeImmutable) {
                 throw SkrillResponseException::fromSkillError(sprintf('Invalid time "%s".', $time));
             }
 
-            $item = new HistoryItem(
-                $reference,
-                $skrillId,
-                $datetime,
-                $type,
-                $details,
-                $lesion,
-                $profit,
-                $status,
-                $balance,
-                $amount,
-                $currency,
-                $info,
-                $paymentType
+            $result->append(
+                new HistoryItem($reference, $skrillId, $datetime, $type, $details, $lesion, $profit, $status, $balance, $amount, $currency, $info, $paymentType)
             );
-
-            $result->append($item);
         }
 
         unlink($tmpFile->getPathname());

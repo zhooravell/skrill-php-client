@@ -18,8 +18,8 @@ use GuzzleHttp\Handler\MockHandler;
 use Skrill\Exception\SkrillException;
 use GuzzleHttp\Exception\GuzzleException;
 use Skrill\Exception\InvalidEmailException;
-use Skrill\Exception\InvalidPasswordException;
 use Skrill\Exception\SkrillResponseException;
+use Skrill\Exception\InvalidPasswordException;
 
 /**
  * Class SkrillClientViewHistoryTest.
@@ -52,7 +52,6 @@ class SkrillClientViewHistoryTest extends TestCase
     {
         $client = new Client(['handler' => $this->successHistoryMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
-
         $history = $client->viewHistory(new DateTime('2018-01-01'));
 
         self::assertInstanceOf(ArrayObject::class, $history);
