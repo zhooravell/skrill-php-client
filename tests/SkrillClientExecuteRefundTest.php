@@ -7,16 +7,23 @@ namespace Skrill\Tests;
 use GuzzleHttp\Client;
 use Skrill\SkrillClient;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use Skrill\ValueObject\Email;
 use Skrill\Factory\SidFactory;
 use GuzzleHttp\ClientInterface;
 use PHPUnit\Framework\TestCase;
 use Skrill\ValueObject\Password;
 use Money\Currencies\ISOCurrencies;
+use GuzzleHttp\Handler\MockHandler;
 use Money\Parser\DecimalMoneyParser;
+use Skrill\Exception\SkrillException;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use Skrill\Exception\InvalidSidException;
+use Skrill\Exception\InvalidEmailException;
 use Skrill\Exception\SkrillResponseException;
+use Skrill\Exception\InvalidPasswordException;
 
 /**
  * Class SkrillClientExecuteRefundTest.
@@ -26,12 +33,12 @@ class SkrillClientExecuteRefundTest extends TestCase
     /**
      * @var HandlerStack
      */
-    private $successSidMockHandler;
+    private $successRefundMockHandler;
 
     /**
      * @var HandlerStack
      */
-    private $failSidMockHandler;
+    private $failRefundMockHandler;
 
     /**
      * @var DecimalMoneyParser
@@ -39,15 +46,15 @@ class SkrillClientExecuteRefundTest extends TestCase
     private $parser;
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidSidException
-     * @throws \Skrill\Exception\SkrillException
+     * @throws GuzzleException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
+     * @throws InvalidSidException
+     * @throws SkrillException
      */
     public function testExecuteRefundSuccess()
     {
-        $client = new Client(['handler' => $this->successSidMockHandler]);
+        $client = new Client(['handler' => $this->successRefundMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
         $result = $client->executeRefund(SidFactory::createFromString('test-sid'));
@@ -56,28 +63,28 @@ class SkrillClientExecuteRefundTest extends TestCase
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidSidException
-     * @throws \Skrill\Exception\SkrillException
+     * @throws GuzzleException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
+     * @throws InvalidSidException
+     * @throws SkrillException
      */
     public function testExecuteRefundFail()
     {
         self::expectException(SkrillResponseException::class);
 
-        $client = new Client(['handler' => $this->failSidMockHandler]);
+        $client = new Client(['handler' => $this->failRefundMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
         $client->executeRefund(SidFactory::createFromString('test-sid'));
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidSidException
-     * @throws \Skrill\Exception\SkrillException
+     * @throws GuzzleException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
+     * @throws InvalidSidException
+     * @throws SkrillException
      */
     public function testExecuteRefundCheckFormParams()
     {
@@ -136,9 +143,8 @@ class SkrillClientExecuteRefundTest extends TestCase
         parent::setUp();
 
         $this->parser = new DecimalMoneyParser(new ISOCurrencies());
-
-        $this->successSidMockHandler = HandlerStack::create(new \GuzzleHttp\Handler\MockHandler([
-            new \GuzzleHttp\Psr7\Response(
+        $this->successRefundMockHandler = HandlerStack::create(new MockHandler([
+            new Response(
                 200,
                 [],
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -153,8 +159,8 @@ class SkrillClientExecuteRefundTest extends TestCase
             ),
         ]));
 
-        $this->failSidMockHandler = HandlerStack::create(new \GuzzleHttp\Handler\MockHandler([
-            new \GuzzleHttp\Psr7\Response(
+        $this->failRefundMockHandler = HandlerStack::create(new MockHandler([
+            new Response(
                 200,
                 [],
                 '<?xml version="1.0" encoding="UTF-8"?><response><error><error_msg>SESSION_EXPIRED</error_msg></error></response>'

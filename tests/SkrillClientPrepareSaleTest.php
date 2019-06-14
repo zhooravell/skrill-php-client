@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Skrill\Tests;
 
+use Exception;
 use GuzzleHttp\Client;
 use Skrill\SkrillClient;
 use Skrill\ValueObject\Url;
 use GuzzleHttp\HandlerStack;
 use Skrill\ValueObject\Email;
+use GuzzleHttp\Psr7\Response;
 use Skrill\Request\SaleRequest;
 use GuzzleHttp\ClientInterface;
 use PHPUnit\Framework\TestCase;
@@ -16,18 +18,27 @@ use Skrill\ValueObject\Language;
 use Skrill\ValueObject\Password;
 use Money\Currencies\ISOCurrencies;
 use Skrill\ValueObject\Description;
+use GuzzleHttp\Handler\MockHandler;
 use Skrill\ValueObject\CompanyName;
 use Money\Parser\DecimalMoneyParser;
+use Skrill\Exception\SkrillException;
 use Skrill\ValueObject\TransactionID;
 use Psr\Http\Message\StreamInterface;
 use Skrill\SkrillSaleClientInterface;
 use Skrill\SkrillRefundClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Skrill\SkrillHistoryClientInterface;
+use Skrill\Exception\InvalidUrlException;
 use Skrill\SkrillOnDemandClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
 use Skrill\SkrillTransferClientInterface;
+use Skrill\Exception\InvalidLangException;
+use Skrill\Exception\InvalidEmailException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Skrill\Exception\SkrillResponseException;
+use Skrill\Exception\InvalidPasswordException;
+use Skrill\Exception\InvalidCompanyNameException;
+use Skrill\Exception\InvalidDescriptionException;
 
 /**
  * Class SkrillClientTest.
@@ -37,12 +48,12 @@ class SkrillClientPrepareSaleTest extends TestCase
     /**
      * @var HandlerStack
      */
-    private $successSidMockHandler;
+    private $successSaleMockHandler;
 
     /**
      * @var HandlerStack
      */
-    private $failSidMockHandler;
+    private $failSaleMockHandler;
 
     /**
      * @var DecimalMoneyParser
@@ -50,8 +61,8 @@ class SkrillClientPrepareSaleTest extends TestCase
     private $parser;
 
     /**
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
      */
     public function testImplementation()
     {
@@ -63,53 +74,52 @@ class SkrillClientPrepareSaleTest extends TestCase
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\SkrillException
-     * @throws \Exception
+     * @throws GuzzleException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
+     * @throws SkrillException
+     * @throws Exception
      */
     public function testPrepareSaleSuccess()
     {
-        $client = new Client(['handler' => $this->successSidMockHandler]);
+        $client = new Client(['handler' => $this->successSaleMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
-        $transactionId = new TransactionID('123');
-        $amount = $this->parser->parse('10.5', 'EUR');
-
-        $request = new SaleRequest($transactionId, $amount);
-
-        $sid = $client->prepareSale($request);
+        $sid = $client->prepareSale(new SaleRequest(
+                new TransactionID('123'),
+                $this->parser->parse('10.5', 'EUR')
+            )
+        );
 
         self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', (string) $sid);
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\SkrillException
+     * @throws GuzzleException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
+     * @throws SkrillException
      */
     public function testPrepareSaleFail()
     {
         self::expectException(SkrillResponseException::class);
 
-        $client = new Client(['handler' => $this->failSidMockHandler]);
+        $client = new Client(['handler' => $this->failSaleMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
-        $transactionId = new TransactionID('123');
-        $amount = $this->parser->parse('10.5', 'EUR');
-
-        $request = new SaleRequest($transactionId, $amount);
+        $request = new SaleRequest(
+            new TransactionID('123'),
+            $this->parser->parse('10.5', 'EUR')
+        );
 
         $client->prepareSale($request);
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\SkrillException
+     * @throws GuzzleException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
+     * @throws SkrillException
      */
     public function testPrepareSaleCheckFormParams()
     {
@@ -156,14 +166,14 @@ class SkrillClientPrepareSaleTest extends TestCase
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidCompanyNameException
-     * @throws \Skrill\Exception\InvalidDescriptionException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidLangException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidUrlException
-     * @throws \Skrill\Exception\SkrillException
+     * @throws GuzzleException
+     * @throws InvalidCompanyNameException
+     * @throws InvalidDescriptionException
+     * @throws InvalidEmailException
+     * @throws InvalidLangException
+     * @throws InvalidPasswordException
+     * @throws InvalidUrlException
+     * @throws SkrillException
      */
     public function testPrepareSaleCheckFormParams2()
     {
@@ -235,20 +245,11 @@ class SkrillClientPrepareSaleTest extends TestCase
         parent::setUp();
 
         $this->parser = new DecimalMoneyParser(new ISOCurrencies());
-
-        $this->successSidMockHandler = HandlerStack::create(new \GuzzleHttp\Handler\MockHandler([
-            new \GuzzleHttp\Psr7\Response(
-                200,
-                [],
-                '5e281d1376d92ba789ca7f0583e045d4'
-            ),
+        $this->successSaleMockHandler = HandlerStack::create(new MockHandler([
+            new Response(200, [], '5e281d1376d92ba789ca7f0583e045d4'),
         ]));
-
-        $this->failSidMockHandler = HandlerStack::create(new \GuzzleHttp\Handler\MockHandler([
-            new \GuzzleHttp\Psr7\Response(
-                200,
-                [],
-                '{"code":"BAD_REQUEST","message":"Already paid for 2451748842"}'
+        $this->failSaleMockHandler = HandlerStack::create(new MockHandler([
+            new Response(200, [], '{"code":"BAD_REQUEST","message":"Already paid for 2451748842"}'
             ),
         ]));
     }

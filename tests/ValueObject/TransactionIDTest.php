@@ -9,9 +9,9 @@ use Skrill\ValueObject\TransactionID;
 use Skrill\Exception\InvalidTransactionIDException;
 
 /**
- * Class TransactionIdTest.
+ * Class TransactionIDTest.
  */
-class TransactionIdTest extends TestCase
+class TransactionIDTest extends TestCase
 {
     /**
      * @throws InvalidTransactionIDException

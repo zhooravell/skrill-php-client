@@ -45,16 +45,6 @@ class SecretWordTest extends TestCase
 
         new SecretWord(' ');
     }
-//
-//    /**
-//     * @throws InvalidSecretWordException
-//     */
-//    public function testUpperCase()
-//    {
-//        self::expectException(InvalidSecretWordException::class);
-//
-//        new SecretWord('TestNew');
-//    }
 
     /**
      * @dataProvider specialCharactersValueProvider
@@ -71,7 +61,10 @@ class SecretWordTest extends TestCase
         new SecretWord($value);
     }
 
-    public function specialCharactersValueProvider()
+    /**
+     * @return array
+     */
+    public function specialCharactersValueProvider(): array
     {
         return [
             ['test@'],

@@ -12,6 +12,9 @@ use Money\Parser\DecimalMoneyParser;
 use Skrill\ValueObject\TransactionID;
 use Money\Formatter\DecimalMoneyFormatter;
 use Skrill\Signature\SHA2SignatureCalculator;
+use Skrill\Exception\InvalidSignatureException;
+use Skrill\Exception\InvalidSecretWordException;
+use Skrill\Exception\InvalidTransactionIDException;
 
 /**
  * Class SHA2SignatureCalculatorTest.
@@ -19,9 +22,9 @@ use Skrill\Signature\SHA2SignatureCalculator;
 class SHA2SignatureCalculatorTest extends TestCase
 {
     /**
-     * @throws \Skrill\Exception\InvalidSecretWordException
-     * @throws \Skrill\Exception\InvalidSignatureException
-     * @throws \Skrill\Exception\InvalidTransactionIDException
+     * @throws InvalidSecretWordException
+     * @throws InvalidSignatureException
+     * @throws InvalidTransactionIDException
      */
     public function testCalculateMethod()
     {

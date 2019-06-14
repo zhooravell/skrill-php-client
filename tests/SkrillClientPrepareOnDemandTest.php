@@ -4,22 +4,31 @@ declare(strict_types=1);
 
 namespace Skrill\Tests;
 
+use Exception;
 use GuzzleHttp\Client;
 use Skrill\SkrillClient;
 use GuzzleHttp\HandlerStack;
 use Skrill\ValueObject\Email;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\ClientInterface;
 use PHPUnit\Framework\TestCase;
 use Skrill\ValueObject\Password;
+use GuzzleHttp\Handler\MockHandler;
 use Skrill\Request\OnDemandRequest;
 use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;
+use Skrill\Exception\SkrillException;
 use Skrill\ValueObject\TransactionID;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Exception\GuzzleException;
 use Skrill\ValueObject\RecurringPaymentID;
+use Skrill\Exception\InvalidEmailException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Skrill\Exception\SkrillResponseException;
+use Skrill\Exception\InvalidPasswordException;
+use Skrill\Exception\InvalidTransactionIDException;
+use Skrill\Exception\InvalidRecurringPaymentIDException;
 
 /**
  * Class SkrillClientPrepareOnDemandTest.
@@ -29,12 +38,12 @@ class SkrillClientPrepareOnDemandTest extends TestCase
     /**
      * @var HandlerStack
      */
-    private $successSidMockHandler;
+    private $successOnDemandMockHandler;
 
     /**
      * @var HandlerStack
      */
-    private $failSidMockHandler;
+    private $failOnDemandMockHandler;
 
     /**
      * @var DecimalMoneyParser
@@ -42,61 +51,57 @@ class SkrillClientPrepareOnDemandTest extends TestCase
     private $parser;
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidRecurringPaymentIDException
-     * @throws \Skrill\Exception\InvalidTransactionIDException
-     * @throws \Skrill\Exception\SkrillException
-     * @throws \Exception
+     * @throws GuzzleException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
+     * @throws InvalidRecurringPaymentIDException
+     * @throws InvalidTransactionIDException
+     * @throws SkrillException
+     * @throws Exception
      */
     public function testPrepareOnDemandSuccess()
     {
-        $client = new Client(['handler' => $this->successSidMockHandler]);
+        $client = new Client(['handler' => $this->successOnDemandMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
-        $request = new OnDemandRequest(
+        $sid = $client->prepareOnDemand(new OnDemandRequest(
             new RecurringPaymentID('111'),
             new TransactionID(22),
             $this->parser->parse('10', 'EUR')
-        );
-
-        $sid = $client->prepareOnDemand($request);
+        ));
 
         self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', (string) $sid);
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidRecurringPaymentIDException
-     * @throws \Skrill\Exception\InvalidTransactionIDException
-     * @throws \Skrill\Exception\SkrillException
+     * @throws GuzzleException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
+     * @throws InvalidRecurringPaymentIDException
+     * @throws InvalidTransactionIDException
+     * @throws SkrillException
      */
     public function testPrepareOnDemandFail()
     {
         self::expectException(SkrillResponseException::class);
 
-        $client = new Client(['handler' => $this->failSidMockHandler]);
+        $client = new Client(['handler' => $this->failOnDemandMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
-        $request = new OnDemandRequest(
+        $client->prepareOnDemand(new OnDemandRequest(
             new RecurringPaymentID('111'),
             new TransactionID(22),
             $this->parser->parse('10', 'EUR')
-        );
-
-        $client->prepareOnDemand($request);
+        ));
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\InvalidRecurringPaymentIDException
-     * @throws \Skrill\Exception\InvalidTransactionIDException
-     * @throws \Skrill\Exception\SkrillException
+     * @throws GuzzleException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
+     * @throws InvalidRecurringPaymentIDException
+     * @throws InvalidTransactionIDException
+     * @throws SkrillException
      */
     public function testPrepareOnDemandCheckFormParams()
     {
@@ -147,7 +152,6 @@ class SkrillClientPrepareOnDemandTest extends TestCase
         );
 
         $client = new SkrillClient($client, new Email($email), new Password($password));
-
         $client->prepareOnDemand($request);
     }
 
@@ -159,17 +163,16 @@ class SkrillClientPrepareOnDemandTest extends TestCase
         parent::setUp();
 
         $this->parser = new DecimalMoneyParser(new ISOCurrencies());
-
-        $this->successSidMockHandler = HandlerStack::create(new \GuzzleHttp\Handler\MockHandler([
-            new \GuzzleHttp\Psr7\Response(
+        $this->successOnDemandMockHandler = HandlerStack::create(new MockHandler([
+            new Response(
                 200,
                 [],
                 '<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>'
             ),
         ]));
 
-        $this->failSidMockHandler = HandlerStack::create(new \GuzzleHttp\Handler\MockHandler([
-            new \GuzzleHttp\Psr7\Response(
+        $this->failOnDemandMockHandler = HandlerStack::create(new MockHandler([
+            new Response(
                 200,
                 [],
                 '<?xml version="1.0" encoding="UTF-8"?><response><error><error_msg>MISSING_AMOUNT</error_msg></error></response>'

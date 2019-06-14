@@ -11,6 +11,9 @@ use Skrill\ValueObject\Description;
 use Skrill\Request\TransferRequest;
 use Money\Parser\DecimalMoneyParser;
 use Skrill\ValueObject\TransactionID;
+use Skrill\Exception\InvalidEmailException;
+use Skrill\Exception\InvalidDescriptionException;
+use Skrill\Exception\InvalidTransactionIDException;
 
 /**
  * Class TransferRequestTest.
@@ -18,9 +21,9 @@ use Skrill\ValueObject\TransactionID;
 class TransferRequestTest extends TestCase
 {
     /**
-     * @throws \Skrill\Exception\InvalidDescriptionException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidTransactionIDException
+     * @throws InvalidDescriptionException
+     * @throws InvalidEmailException
+     * @throws InvalidTransactionIDException
      */
     public function testSuccess()
     {
@@ -44,7 +47,6 @@ class TransferRequestTest extends TestCase
         );
 
         self::assertInstanceOf(TransferRequest::class, $request->setReferenceTransaction(new TransactionID('test')));
-
         self::assertEquals(
             [
                 'currency' => 'EUR',

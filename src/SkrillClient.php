@@ -7,6 +7,7 @@ namespace Skrill;
 use ArrayObject;
 use LimitIterator;
 use SplFileObject;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Skrill\ValueObject\Sid;
 use Skrill\ValueObject\Url;
@@ -67,7 +68,7 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
     /**
      * Skrill API/MQI password.
      *
-     * @var Password
+     * @var string
      */
     private $password;
 
@@ -239,10 +240,16 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
         foreach ($it as $row) {
             list($id, $time, $type, $details, $lesion, $profit, $status, $balance, $reference, $amount, $currency, $info, $skrillId, $paymentType) = $row;
 
+            $datetime = DateTimeImmutable::createFromFormat('d M y H:i', $time);
+
+            if (!$datetime instanceof DateTimeImmutable) {
+                throw SkrillResponseException::fromSkillError(sprintf('Invalid time "%s".', $time));
+            }
+
             $item = new HistoryItem(
                 $reference,
                 $skrillId,
-                \DateTimeImmutable::createFromFormat('d M y H:i', $time),
+                $datetime,
                 $type,
                 $details,
                 $lesion,

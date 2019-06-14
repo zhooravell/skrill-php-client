@@ -10,6 +10,8 @@ use Skrill\Request\RefundRequest;
 use Money\Currencies\ISOCurrencies;
 use Money\Parser\DecimalMoneyParser;
 use Skrill\ValueObject\TransactionID;
+use Skrill\Exception\InvalidUrlException;
+use Skrill\Exception\InvalidTransactionIDException;
 
 /**
  * Class RefundRequestTest.
@@ -17,8 +19,8 @@ use Skrill\ValueObject\TransactionID;
 class RefundRequestTest extends TestCase
 {
     /**
-     * @throws \Skrill\Exception\InvalidTransactionIDException
-     * @throws \Skrill\Exception\InvalidUrlException
+     * @throws InvalidTransactionIDException
+     * @throws InvalidUrlException
      */
     public function testSuccess()
     {
@@ -43,8 +45,8 @@ class RefundRequestTest extends TestCase
     }
 
     /**
-     * @throws \Skrill\Exception\InvalidTransactionIDException
-     * @throws \Skrill\Exception\InvalidUrlException
+     * @throws InvalidTransactionIDException
+     * @throws InvalidUrlException
      */
     public function testPartialSuccess()
     {
@@ -61,7 +63,6 @@ class RefundRequestTest extends TestCase
         );
 
         self::assertInstanceOf(RefundRequest::class, $request->setStatusUrl(new Url('https://google.com/1')));
-
         self::assertEquals(
             [
                 'transaction_id' => '111',

@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\Request;
 
-use Money\Currencies\ISOCurrencies;
-use Money\Money;
-use Money\Currency;
-use Money\Parser\DecimalMoneyParser;
 use Skrill\ValueObject\Url;
 use PHPUnit\Framework\TestCase;
+use Money\Currencies\ISOCurrencies;
 use Skrill\Request\OnDemandRequest;
+use Money\Parser\DecimalMoneyParser;
 use Skrill\ValueObject\TransactionID;
+use Skrill\Exception\InvalidUrlException;
 use Skrill\ValueObject\RecurringPaymentID;
+use Skrill\Exception\InvalidTransactionIDException;
+use Skrill\Exception\InvalidRecurringPaymentIDException;
 
 /**
  * Class OnDemandRequestTest.
@@ -20,9 +21,9 @@ use Skrill\ValueObject\RecurringPaymentID;
 class OnDemandRequestTest extends TestCase
 {
     /**
-     * @throws \Skrill\Exception\InvalidRecurringPaymentIDException
-     * @throws \Skrill\Exception\InvalidTransactionIDException
-     * @throws \Skrill\Exception\InvalidUrlException
+     * @throws InvalidRecurringPaymentIDException
+     * @throws InvalidTransactionIDException
+     * @throws InvalidUrlException
      */
     public function testSuccess()
     {
@@ -44,12 +45,9 @@ class OnDemandRequestTest extends TestCase
             $request->getPayload()
         );
 
-        $res = $request
-            ->setStatusUrl(new Url('https://google.com/1'))
-        ;
+        $res = $request->setStatusUrl(new Url('https://google.com/1'));
 
         self::assertInstanceOf(OnDemandRequest::class, $res);
-
         self::assertEquals(
             [
                 'frn_trn_id' => '111',

@@ -4,21 +4,29 @@ declare(strict_types=1);
 
 namespace Skrill\Tests;
 
+use Exception;
 use GuzzleHttp\Client;
 use Skrill\SkrillClient;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use Skrill\ValueObject\Email;
 use PHPUnit\Framework\TestCase;
 use GuzzleHttp\ClientInterface;
 use Skrill\ValueObject\Password;
 use Money\Currencies\ISOCurrencies;
 use Skrill\Request\TransferRequest;
+use GuzzleHttp\Handler\MockHandler;
 use Skrill\ValueObject\Description;
 use Money\Parser\DecimalMoneyParser;
 use Psr\Http\Message\StreamInterface;
+use Skrill\Exception\SkrillException;
 use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use Skrill\Exception\InvalidEmailException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Skrill\Exception\SkrillResponseException;
+use Skrill\Exception\InvalidPasswordException;
+use Skrill\Exception\InvalidDescriptionException;
 
 /**
  * Class SkrillClientPrepareTransferTest.
@@ -28,12 +36,12 @@ class SkrillClientPrepareTransferTest extends TestCase
     /**
      * @var HandlerStack
      */
-    private $successSidMockHandler;
+    private $successTransferMockHandler;
 
     /**
      * @var HandlerStack
      */
-    private $failSidMockHandler;
+    private $failTransferMockHandler;
 
     /**
      * @var DecimalMoneyParser
@@ -41,16 +49,16 @@ class SkrillClientPrepareTransferTest extends TestCase
     private $parser;
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidDescriptionException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\SkrillException
-     * @throws \Exception
+     * @throws GuzzleException
+     * @throws InvalidDescriptionException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
+     * @throws SkrillException
+     * @throws Exception
      */
     public function testPrepareTransferSuccess()
     {
-        $client = new Client(['handler' => $this->successSidMockHandler]);
+        $client = new Client(['handler' => $this->successTransferMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
         $request = new TransferRequest(
@@ -65,17 +73,17 @@ class SkrillClientPrepareTransferTest extends TestCase
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidDescriptionException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\SkrillException
+     * @throws GuzzleException
+     * @throws InvalidDescriptionException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
+     * @throws SkrillException
      */
     public function testPrepareTransferFail()
     {
         self::expectException(SkrillResponseException::class);
 
-        $client = new Client(['handler' => $this->failSidMockHandler]);
+        $client = new Client(['handler' => $this->failTransferMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
         $request = new TransferRequest(
@@ -88,11 +96,11 @@ class SkrillClientPrepareTransferTest extends TestCase
     }
 
     /**
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     * @throws \Skrill\Exception\InvalidDescriptionException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidPasswordException
-     * @throws \Skrill\Exception\SkrillException
+     * @throws GuzzleException
+     * @throws InvalidDescriptionException
+     * @throws InvalidEmailException
+     * @throws InvalidPasswordException
+     * @throws SkrillException
      */
     public function testPrepareTransferCheckFormParams()
     {
@@ -157,17 +165,16 @@ class SkrillClientPrepareTransferTest extends TestCase
         parent::setUp();
 
         $this->parser = new DecimalMoneyParser(new ISOCurrencies());
-
-        $this->successSidMockHandler = HandlerStack::create(new \GuzzleHttp\Handler\MockHandler([
-            new \GuzzleHttp\Psr7\Response(
+        $this->successTransferMockHandler = HandlerStack::create(new MockHandler([
+            new Response(
                 200,
                 [],
                 '<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>'
             ),
         ]));
 
-        $this->failSidMockHandler = HandlerStack::create(new \GuzzleHttp\Handler\MockHandler([
-            new \GuzzleHttp\Psr7\Response(
+        $this->failTransferMockHandler = HandlerStack::create(new MockHandler([
+            new Response(
                 200,
                 [],
                 '<?xml version="1.0" encoding="UTF-8"?><response><error><error_msg>MISSING_AMOUNT</error_msg></error></response>'

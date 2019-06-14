@@ -13,7 +13,13 @@ use Money\Currencies\ISOCurrencies;
 use Skrill\ValueObject\Description;
 use Money\Parser\DecimalMoneyParser;
 use Skrill\ValueObject\TransactionID;
+use Skrill\Exception\InvalidUrlException;
+use Skrill\Exception\InvalidLangException;
+use Skrill\Exception\InvalidEmailException;
 use Skrill\ValueObject\RecurringBillingNote;
+use Skrill\Exception\InvalidDescriptionException;
+use Skrill\Exception\InvalidTransactionIDException;
+use Skrill\Exception\InvalidRecurringBillingNoteException;
 
 /**
  * Class RedirectUrlRequestTest.
@@ -21,12 +27,12 @@ use Skrill\ValueObject\RecurringBillingNote;
 class SaleRequestTest extends TestCase
 {
     /**
-     * @throws \Skrill\Exception\InvalidDescriptionException
-     * @throws \Skrill\Exception\InvalidEmailException
-     * @throws \Skrill\Exception\InvalidLangException
-     * @throws \Skrill\Exception\InvalidRecurringBillingNoteException
-     * @throws \Skrill\Exception\InvalidTransactionIDException
-     * @throws \Skrill\Exception\InvalidUrlException
+     * @throws InvalidDescriptionException
+     * @throws InvalidEmailException
+     * @throws InvalidLangException
+     * @throws InvalidRecurringBillingNoteException
+     * @throws InvalidTransactionIDException
+     * @throws InvalidUrlException
      */
     public function testSuccess()
     {
@@ -53,7 +59,6 @@ class SaleRequestTest extends TestCase
         ;
 
         self::assertInstanceOf(SaleRequest::class, $res);
-
         self::assertEquals(
             [
                 'transaction_id' => '111',

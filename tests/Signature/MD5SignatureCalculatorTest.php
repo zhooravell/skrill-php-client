@@ -12,6 +12,9 @@ use Money\Parser\DecimalMoneyParser;
 use Skrill\ValueObject\TransactionID;
 use Money\Formatter\DecimalMoneyFormatter;
 use Skrill\Signature\MD5SignatureCalculator;
+use Skrill\Exception\InvalidSignatureException;
+use Skrill\Exception\InvalidSecretWordException;
+use Skrill\Exception\InvalidTransactionIDException;
 
 /**
  * Class MD5SignatureCalculatorTest.
@@ -19,9 +22,9 @@ use Skrill\Signature\MD5SignatureCalculator;
 class MD5SignatureCalculatorTest extends TestCase
 {
     /**
-     * @throws \Skrill\Exception\InvalidSecretWordException
-     * @throws \Skrill\Exception\InvalidSignatureException
-     * @throws \Skrill\Exception\InvalidTransactionIDException
+     * @throws InvalidSecretWordException
+     * @throws InvalidSignatureException
+     * @throws InvalidTransactionIDException
      */
     public function testCalculateMethod()
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\Response;
 
+use ReflectionClass;
 use Skrill\Response\Response;
 use PHPUnit\Framework\TestCase;
 use Skrill\Exception\ResponseDataException;
@@ -18,7 +19,7 @@ class ResponseTest extends TestCase
      */
     public function testIsFinal()
     {
-        $method = new \ReflectionClass(Response::class);
+        $method = new ReflectionClass(Response::class);
 
         $this->assertTrue($method->isFinal());
     }
@@ -29,15 +30,11 @@ class ResponseTest extends TestCase
      * @param string     $key
      * @param mixed      $expected
      * @param array      $data
-     * @param null|mixed $default
+     * @param mixed|null $default
      */
     public function testDotNotation($key, $expected, array $data, $default = null)
     {
-        $response = new Response($data);
-
-        $value = $response->get($key, $default);
-
-        $this->assertEquals($expected, $value);
+        $this->assertEquals($expected, (new Response($data))->get($key, $default));
     }
 
     /**
