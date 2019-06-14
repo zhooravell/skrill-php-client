@@ -2,7 +2,7 @@ Skrill PHP client
 =================
 > Skrill api php wrapper.
 
-[![License][license-image]][license-link] [![Build Status][travis-image]][travis-link] [![codecov][codecov-image]][codecov-link]
+[![License][license-image]][license-link] [![Build Status][travis-image]][travis-link] [![codecov][codecov-image]][codecov-link] [![scrutinizer][scrutinizer-image]][scrutinizer-link] [![intelligence][intelligence-image]][intelligence-link] 
 
 ![](https://www.skrill.com/fileadmin/templates/images/skrill-logo-gradient.svg)
 
@@ -27,3 +27,9 @@ $ composer require zhooravell/skrill-php-client
 
 [codecov-link]: https://codecov.io/gh/zhooravell/skrill-php-client
 [codecov-image]: https://codecov.io/gh/zhooravell/skrill-php-client/branch/master/graph/badge.svg
+
+[scrutinizer-link]: https://scrutinizer-ci.com/g/zhooravell/skrill-php-client/?branch=master
+[scrutinizer-image]: https://scrutinizer-ci.com/g/zhooravell/skrill-php-client/badges/quality-score.png?b=master
+
+[intelligence-link]: https://scrutinizer-ci.com/code-intelligence
+[intelligence-image]: https://scrutinizer-ci.com/g/zhooravell/skrill-php-client/badges/code-intelligence.svg?b=master
