@@ -12,6 +12,35 @@ Skrill PHP client
 $ composer require zhooravell/skrill-php-client
 ```
 
+## Examples
+
+```php
+<?php
+
+use Money\Money;
+use Money\Currency;
+use GuzzleHttp\Client;
+use Skrill\SkrillClient;
+use Skrill\ValueObject\Email;
+use Skrill\Request\SaleRequest;
+use Skrill\ValueObject\Password;
+use Skrill\ValueObject\TransactionID;
+use Skrill\Factory\RedirectUrlFactory;
+
+$httpClient = new Client();
+$email = new Email('...');
+$password = new Password('...');
+
+$client = new SkrillClient($httpClient, $email, $password);
+$transactionID = new TransactionID('...');
+$money = new Money(1, new Currency('USD'));
+$request = new SaleRequest($transactionID, $this->parser->parse('10.5', 'EUR'));
+$sid = $client->prepareSale($request);
+$redirectURL = RedirectUrlFactory::fromSid($sid);
+
+var_dump($redirectURL);
+```
+
 ## Source(s)
 
 * [Skrill](https://www.skrill.com)

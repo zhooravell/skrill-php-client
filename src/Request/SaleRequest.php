@@ -15,7 +15,7 @@ use Skrill\ValueObject\RecurringBillingNote;
 use Skrill\Request\Traits\AmountFormatterTrait;
 
 /**
- * Class RedirectUrlRequest.
+ * Class SaleRequest.
  */
 final class SaleRequest
 {
