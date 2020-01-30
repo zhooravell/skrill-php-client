@@ -19,6 +19,7 @@ use GuzzleHttp\ClientInterface;
 use Skrill\Request\SaleRequest;
 use Skrill\Response\HistoryItem;
 use Skrill\ValueObject\Password;
+use Skrill\Request\PayoutRequest;
 use Skrill\Request\RefundRequest;
 use Skrill\Request\TransferRequest;
 use Skrill\Factory\ResponseFactory;
@@ -31,7 +32,7 @@ use Skrill\Exception\SkrillResponseException;
 /**
  * Skrill HTTP client.
  */
-final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemandClientInterface, SkrillSaleClientInterface, SkrillTransferClientInterface, SkrillRefundClientInterface
+final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemandClientInterface, SkrillSaleClientInterface, SkrillTransferClientInterface, SkrillRefundClientInterface, SkrillPayoutClientInterface
 {
     /**
      * @var ClientInterface
@@ -139,6 +140,23 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
      *
      * @throws GuzzleException
      */
+    public function preparePayout(PayoutRequest $request): Sid
+    {
+        $params = $request->getPayload();
+        $params['action'] = 'prepare';
+        $params['email'] = strval($this->merchantEmail);
+        $params['password'] = $this->password;
+
+        return SidFactory::createFromXMLResponse(
+            $this->request($params, 'https://www.skrill.com/app/pay.pl')
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws GuzzleException
+     */
     public function prepareRefund(RefundRequest $request): Sid
     {
         $params = $request->getPayload();
@@ -157,6 +175,18 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
      * @throws GuzzleException
      */
     public function executeTransfer(Sid $sid): Response
+    {
+        return ResponseFactory::createFromTransferResponse(
+            $this->request(['action' => 'transfer', 'sid' => strval($sid)], 'https://www.skrill.com/app/pay.pl')
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws GuzzleException
+     */
+    public function executePayout(Sid $sid): Response
     {
         return ResponseFactory::createFromTransferResponse(
             $this->request(['action' => 'transfer', 'sid' => strval($sid)], 'https://www.skrill.com/app/pay.pl')
