@@ -57,7 +57,7 @@ final class PayoutRequest
     public function setOriginalTransactionId(TransactionId $transactionId): self
     {
         // documentation mentions either mb_transaction_id or transaction_id to be used.
-        $this->payload['transaction_id'] = strval($transactionId);
+        $this->payload['mb_transaction_id'] = strval($transactionId);
 
         return $this;
     }
