@@ -20,7 +20,6 @@ final class PayoutRequest
     use AmountFormatterTrait;
 
     /**
-     * @param Email       $recipientEmail
      * @param Money       $amount
      * @param Description $description
      */

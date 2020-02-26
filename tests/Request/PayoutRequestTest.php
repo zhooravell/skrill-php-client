@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\Request;
 
-use Skrill\ValueObject\Email;
 use PHPUnit\Framework\TestCase;
+use Skrill\Request\PayoutRequest;
 use Money\Currencies\ISOCurrencies;
 use Skrill\ValueObject\Description;
-use Skrill\Request\PayoutRequest;
 use Money\Parser\DecimalMoneyParser;
 use Skrill\ValueObject\TransactionID;
-use Skrill\Exception\InvalidEmailException;
 use Skrill\Exception\InvalidDescriptionException;
 use Skrill\Exception\InvalidTransactionIDException;
 
@@ -22,7 +20,6 @@ class PayoutRequestTest extends TestCase
 {
     /**
      * @throws InvalidDescriptionException
-     * @throws InvalidEmailException
      * @throws InvalidTransactionIDException
      */
     public function testSuccess()
@@ -44,7 +41,10 @@ class PayoutRequestTest extends TestCase
             $request->getPayload()
         );
 
-        self::assertInstanceOf(PayoutRequest::class, $request->setSkrillOriginalTransactionId(new TransactionID('test')));
+        self::assertInstanceOf(
+            PayoutRequest::class,
+            $request->setSkrillOriginalTransactionId(new TransactionID('test'))
+        );
         self::assertInstanceOf(PayoutRequest::class, $request->setReferenceTransaction(new TransactionID('test-ref')));
 
         self::assertEquals(
@@ -55,6 +55,21 @@ class PayoutRequestTest extends TestCase
                 'note' => '111',
                 'mb_transaction_id' => 'test',
                 'frn_trn_id' => 'test-ref',
+            ],
+            $request->getPayload()
+        );
+
+        self::assertInstanceOf(PayoutRequest::class, $request->setOriginalTransactionId(new TransactionID('test-2')));
+
+        self::assertEquals(
+            [
+                'currency' => 'EUR',
+                'amount' => 1000000.51,
+                'subject' => 'Payout for Product ID:',
+                'note' => '111',
+                'mb_transaction_id' => 'test',
+                'frn_trn_id' => 'test-ref',
+                'transaction_id' => 'test-2',
             ],
             $request->getPayload()
         );
