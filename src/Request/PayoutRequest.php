@@ -54,10 +54,25 @@ final class PayoutRequest
      * @param TransactionID $transactionId instance
      * @return $this
      */
-    public function setOriginalTransactionId(TransactionId $transactionId): self
+    public function setOriginalTransactionId(TransactionID $transactionId): self
     {
-        // documentation mentions either mb_transaction_id or transaction_id to be used.
         $this->payload['transaction_id'] = strval($transactionId);
+
+        return $this;
+    }
+
+    /**
+     * Setting The Skrill transaction ID of the original payment.
+     *
+     * Used for preparing Neteller payouts with initial neteller's successful deposit
+     * transaction ID.
+     *
+     * @param TransactionID $transactionId instance
+     * @return $this
+     */
+    public function setSkrillOriginalTransactionId(TransactionID $transactionId): self
+    {
+        $this->payload['mb_transaction_id'] = strval($transactionId);
 
         return $this;
     }
