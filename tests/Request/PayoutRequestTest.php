@@ -44,7 +44,7 @@ class PayoutRequestTest extends TestCase
             $request->getPayload()
         );
 
-        self::assertInstanceOf(PayoutRequest::class, $request->setOriginalTransactionId(new TransactionID('test')));
+        self::assertInstanceOf(PayoutRequest::class, $request->setSkrillOriginalTransactionId(new TransactionID('test')));
         self::assertInstanceOf(PayoutRequest::class, $request->setReferenceTransaction(new TransactionID('test-ref')));
 
         self::assertEquals(

@@ -150,7 +150,7 @@ class SkrillClientPreparePayoutTest extends TestCase
             new Description($subject, $note)
         );
 
-        $request->setOriginalTransactionId(new TransactionId($transactionId));
+        $request->setSkrillOriginalTransactionId(new TransactionId($transactionId));
 
         $client = new SkrillClient($client, new Email($email), new Password($password));
 
