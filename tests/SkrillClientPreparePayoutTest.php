@@ -130,7 +130,7 @@ class SkrillClientPreparePayoutTest extends TestCase
             ->with('POST', 'https://www.skrill.com/app/pay.pl', [
                 'form_params' => [
                     'action' => 'prepare',
-                    'transaction_id' => $transactionId,
+                    'mb_transaction_id' => $transactionId,
                     'currency' => $currency,
                     'amount' => $amount,
                     'subject' => $subject,

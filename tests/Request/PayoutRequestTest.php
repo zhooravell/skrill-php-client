@@ -53,7 +53,7 @@ class PayoutRequestTest extends TestCase
                 'amount' => 1000000.51,
                 'subject' => 'Payout for Product ID:',
                 'note' => '111',
-                'transaction_id' => 'test',
+                'mb_transaction_id' => 'test',
                 'frn_trn_id' => 'test-ref',
             ],
             $request->getPayload()
