@@ -4,8 +4,6 @@ Skrill PHP client
 
 [![License][license-image]][license-link] [![Build Status][travis-image]][travis-link] [![codecov][codecov-image]][codecov-link] [![scrutinizer][scrutinizer-image]][scrutinizer-link] [![intelligence][intelligence-image]][intelligence-link] 
 
-[![Mutation testing badge][mutation-image]][mutation-link]
-
 ![](https://www.skrill.com/typo3conf/ext/theme/Resources/Public/images/skrill-logo-gradient.svg)
 
 ## Installing
@@ -64,6 +62,3 @@ var_dump($redirectURL);
 
 [intelligence-link]: https://scrutinizer-ci.com/code-intelligence
 [intelligence-image]: https://scrutinizer-ci.com/g/zhooravell/skrill-php-client/badges/code-intelligence.svg?b=master
-
-[mutation-link]: https://dashboard.stryker-mutator.io/reports/github.com/zhooravell/skrill-php-client/master
-[mutation-image]: https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fzhooravell%2Fskrill-php-client%2Fmaster
