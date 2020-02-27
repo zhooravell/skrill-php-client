@@ -13,6 +13,7 @@
         "moneyphp/money": "^3.2"
     },
     "require-dev": {
+        "infection/infection": "^0.15.3",
         "phpunit/phpunit": "^7.0"
     },
     "autoload": {

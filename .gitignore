@@ -3,3 +3,4 @@
 composer.lock
 /coverage
 /phpmetrics
+infection.log
