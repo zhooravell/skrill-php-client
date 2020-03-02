@@ -130,18 +130,6 @@ class ResponseTest extends TestCase
                 ],
                 null,
             ],
-            'null key' => [
-                null,
-                [
-                    'response_text' => 'Site successfully created',
-                    'site_id' => 13,
-                ],
-                [
-                    'response_text' => 'Site successfully created',
-                    'site_id' => 13,
-                ],
-                null,
-            ],
             'key not exists' => [
                 'test',
                 '---DEFAULT---',

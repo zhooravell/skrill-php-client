@@ -36,13 +36,13 @@ final class Response
      *
      * @return mixed
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
         if (0 === count($this->data)) {
             return $default;
         }
 
-        if (null === $key || empty($key)) {
+        if (empty($key)) {
             return $this->data;
         }
 
@@ -50,10 +50,17 @@ final class Response
             return $this->data[$key];
         }
 
-        if (false === strpos($key, '.')) {
-            return $default;
-        }
+        return false === strpos($key, '.') ? $default : $this->getNestedValue($key, $default);
+    }
 
+    /**
+     * @param string $key
+     * @param null   $default
+     *
+     * @return mixed
+     */
+    private function getNestedValue(string $key, $default = null)
+    {
         $array = $this->data;
 
         foreach (explode('.', $key) as $segment) {
@@ -72,7 +79,7 @@ final class Response
      *
      * @return mixed
      */
-    public function __get($name)
+    public function __get(string $name)
     {
         if (array_key_exists($name, $this->data)) {
             return $this->data[$name];
@@ -86,7 +93,7 @@ final class Response
      *
      * @return bool
      */
-    public function __isset($name)
+    public function __isset(string $name)
     {
         return array_key_exists($name, $this->data);
     }
@@ -97,7 +104,7 @@ final class Response
      *
      * @throws ResponseDataException
      */
-    public function __set($name, $value)
+    public function __set(string $name, $value)
     {
         throw ResponseDataException::reedOnlyMode();
     }
