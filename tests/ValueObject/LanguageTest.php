@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\ValueObject;
 
+use Generator;
 use PHPUnit\Framework\TestCase;
 use Skrill\ValueObject\Language;
 use Skrill\Exception\InvalidLangException;
@@ -20,25 +21,27 @@ class LanguageTest extends TestCase
      *
      * @throws InvalidLangException
      */
-    public function testSuccess($value)
+    public function testSuccess(string $value)
     {
-        $currency = new Language($value);
-
-        self::assertEquals($value, (string) $currency);
+        self::assertEquals($value, new Language($value));
     }
 
     /**
-     * @return array
+     * @throws InvalidLangException
      */
-    public function successDataProvider()
+    public function testSuccess2()
     {
-        $result = [];
+        self::assertEquals('FR', new Language('FR '));
+    }
 
+    /**
+     * @return Generator
+     */
+    public function successDataProvider(): Generator
+    {
         foreach (getSkillSupportsLanguages() as $lang => $title) {
-            $result[] = [$lang];
+            yield [$lang];
         }
-
-        return $result;
     }
 
     /**

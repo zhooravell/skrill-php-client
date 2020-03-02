@@ -4,24 +4,27 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\ValueObject;
 
-use PHPUnit\Framework\TestCase;
 use Skrill\ValueObject\Url;
 use Skrill\Exception\InvalidUrlException;
 
 /**
  * Class UrlTest.
  */
-class UrlTest extends TestCase
+class UrlTest extends StringValueObjectTestCase
 {
     /**
+     * @dataProvider emptyStringDataProvider
+     *
+     * @param string $value
+     *
      * @throws InvalidUrlException
      */
-    public function testEmpty()
+    public function testEmpty(string $value)
     {
         self::expectException(InvalidUrlException::class);
         self::expectExceptionMessage('"" is not a valid url.');
 
-        new Url('');
+        new Url($value);
     }
 
     /**
@@ -30,9 +33,16 @@ class UrlTest extends TestCase
     public function testSuccess()
     {
         $url = 'https://api.com';
-        $baseApiUrl = new Url($url);
 
-        self::assertEquals($url, (string) $baseApiUrl);
+        self::assertEquals($url, new Url($url));
+    }
+
+    /**
+     * @throws InvalidUrlException
+     */
+    public function testSuccess2()
+    {
+        self::assertEquals('https://api.com', new Url(' https://api.com '));
     }
 
     /**

@@ -16,7 +16,7 @@ trait AmountFormatterTrait
      *
      * @return float
      */
-    protected function formatToFloat(Money $money): float
+    private function formatToFloat(Money $money): float
     {
         $formatter = new DecimalMoneyFormatter(new ISOCurrencies());
 

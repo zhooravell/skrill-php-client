@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\ValueObject;
 
-use PHPUnit\Framework\TestCase;
+use Generator;
 use Skrill\ValueObject\SecretWord;
 use Skrill\Exception\InvalidSecretWordException;
 
 /**
  * Class SecretWordTest.
  */
-class SecretWordTest extends TestCase
+class SecretWordTest extends StringValueObjectTestCase
 {
     /**
      * @throws InvalidSecretWordException
@@ -19,9 +19,16 @@ class SecretWordTest extends TestCase
     public function testSuccess()
     {
         $value = 'test123';
-        $secretWord = new SecretWord($value);
 
-        self::assertEquals($value, (string) $secretWord);
+        self::assertEquals($value, new SecretWord($value));
+    }
+
+    /**
+     * @throws InvalidSecretWordException
+     */
+    public function testSuccess2()
+    {
+        self::assertEquals('test123', new SecretWord(' test123 '));
     }
 
     /**
@@ -36,14 +43,18 @@ class SecretWordTest extends TestCase
     }
 
     /**
+     * @dataProvider emptyStringDataProvider
+     *
+     * @param string $value
+     *
      * @throws InvalidSecretWordException
      */
-    public function testEmptyValue()
+    public function testEmptyValue(string $value)
     {
         self::expectException(InvalidSecretWordException::class);
         self::expectExceptionMessage('Skrill secret word should not be blank.');
 
-        new SecretWord(' ');
+        new SecretWord($value);
     }
 
     /**
@@ -62,14 +73,12 @@ class SecretWordTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function specialCharactersValueProvider(): array
+    public function specialCharactersValueProvider(): Generator
     {
-        return [
-            ['test@'],
-            ['$test'],
-            ['t%st'],
-        ];
+        yield ['test@'];
+        yield ['$test'];
+        yield ['t%st'];
     }
 }

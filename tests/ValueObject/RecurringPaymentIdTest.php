@@ -11,7 +11,7 @@ use Skrill\Exception\InvalidRecurringPaymentIDException;
 /**
  * Class RecurringPaymentIdTest.
  */
-class RecurringPaymentIdTest extends TestCase
+class RecurringPaymentIdTest extends StringValueObjectTestCase
 {
     /**
      * @throws InvalidRecurringPaymentIDException
@@ -19,19 +19,30 @@ class RecurringPaymentIdTest extends TestCase
     public function testSuccess()
     {
         $value = 'test123';
-        $authKey = new RecurringPaymentID($value);
 
-        self::assertEquals($value, (string) $authKey);
+        self::assertEquals($value, new RecurringPaymentID($value));
     }
 
     /**
      * @throws InvalidRecurringPaymentIDException
      */
-    public function testEmptyValue()
+    public function testSuccess2()
+    {
+        self::assertEquals('test123', new RecurringPaymentID(' test123 '));
+    }
+
+    /**
+     * @dataProvider emptyStringDataProvider
+     *
+     * @param string $value
+     *
+     * @throws InvalidRecurringPaymentIDException
+     */
+    public function testEmptyValue(string $value)
     {
         self::expectException(InvalidRecurringPaymentIDException::class);
         self::expectExceptionMessage('Skrill recurring payment ID should not be blank.');
 
-        new RecurringPaymentID(' ');
+        new RecurringPaymentID($value);
     }
 }

@@ -7,13 +7,12 @@ namespace Skrill\Tests\ValueObject;
 use Exception;
 use DateTimeImmutable;
 use Skrill\ValueObject\Sid;
-use PHPUnit\Framework\TestCase;
 use Skrill\Exception\InvalidSidException;
 
 /**
  * Class SidTest.
  */
-class SidTest extends TestCase
+class SidTest extends StringValueObjectTestCase
 {
     /**
      * @throws InvalidSidException
@@ -22,20 +21,23 @@ class SidTest extends TestCase
     public function testSuccess()
     {
         $value = 'test123';
-        $secretWord = new Sid($value, new DateTimeImmutable());
 
-        self::assertEquals($value, (string) $secretWord);
+        self::assertEquals($value, new Sid($value, new DateTimeImmutable()));
     }
 
     /**
+     * @dataProvider emptyStringDataProvider
+     *
+     * @param string $value
+     *
      * @throws InvalidSidException
      * @throws Exception
      */
-    public function testEmptyValue()
+    public function testEmptyValue(string $value)
     {
         self::expectException(InvalidSidException::class);
         self::expectExceptionMessage('Skrill sid should not be blank.');
 
-        new Sid(' ', new DateTimeImmutable());
+        new Sid($value, new DateTimeImmutable());
     }
 }

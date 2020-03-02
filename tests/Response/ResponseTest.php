@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Skrill\Tests\Response;
 
 use ReflectionClass;
+use ReflectionException;
 use Skrill\Response\Response;
 use PHPUnit\Framework\TestCase;
 use Skrill\Exception\ResponseDataException;
@@ -15,7 +16,7 @@ use Skrill\Exception\ResponseDataException;
 class ResponseTest extends TestCase
 {
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testIsFinal()
     {
@@ -196,6 +197,7 @@ class ResponseTest extends TestCase
             ],
         ]);
 
+        $this->assertNull($response->get('address.street_2'));
         $this->assertEquals($street, $response->get('address.street'));
         $this->assertEquals($userId, $response->userId);
         $this->assertEquals($userId, $response->get('userId'));

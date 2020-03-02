@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\ValueObject;
 
-use PHPUnit\Framework\TestCase;
 use Skrill\ValueObject\Email;
+use PHPUnit\Framework\TestCase;
 use Skrill\Exception\InvalidEmailException;
 
 /**
@@ -19,9 +19,16 @@ class EmailTest extends TestCase
     public function testSuccess()
     {
         $value = 'test@test.com';
-        $authKey = new Email($value);
 
-        self::assertEquals($value, (string) $authKey);
+        self::assertEquals($value, new Email($value));
+    }
+
+    /**
+     * @throws InvalidEmailException
+     */
+    public function testSuccess2()
+    {
+        self::assertEquals('test@test.com', new Email(' test@test.com '));
     }
 
     /**

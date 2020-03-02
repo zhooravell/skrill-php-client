@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\ValueObject;
 
-use PHPUnit\Framework\TestCase;
 use Skrill\ValueObject\Description;
 use Skrill\Exception\InvalidDescriptionException;
 
 /**
  * Class ProductDescriptionTest.
  */
-class DescriptionTest extends TestCase
+class DescriptionTest extends StringValueObjectTestCase
 {
     /**
      * @throws InvalidDescriptionException
@@ -27,24 +26,32 @@ class DescriptionTest extends TestCase
     }
 
     /**
+     * @dataProvider emptyStringDataProvider
+     *
+     * @param string $value
+     *
      * @throws InvalidDescriptionException
      */
-    public function testEmptyText()
+    public function testEmptyText(string $value)
     {
         self::expectException(InvalidDescriptionException::class);
         self::expectExceptionMessage('Description text should not be blank.');
 
-        new Description('Product ID:', '');
+        new Description('Product ID:', $value);
     }
 
     /**
+     * @dataProvider emptyStringDataProvider
+     *
+     * @param string $value
+     *
      * @throws InvalidDescriptionException
      */
-    public function testEmptyDescription()
+    public function testEmptyDescription(string $value)
     {
         self::expectException(InvalidDescriptionException::class);
         self::expectExceptionMessage('Description subject should not be blank.');
 
-        new Description('', '4509334');
+        new Description($value, '4509334');
     }
 }

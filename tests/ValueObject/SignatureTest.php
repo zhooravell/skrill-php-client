@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\ValueObject;
 
-use PHPUnit\Framework\TestCase;
 use Skrill\ValueObject\Signature;
 use Skrill\Exception\InvalidSignatureException;
 
 /**
  * Class SignatureTest.
  */
-class SignatureTest extends TestCase
+class SignatureTest extends StringValueObjectTestCase
 {
     /**
      * @throws InvalidSignatureException
@@ -21,20 +20,24 @@ class SignatureTest extends TestCase
         $value = strtoupper(md5('test123'));
         $signature = new Signature($value);
 
-        self::assertEquals($value, (string) $signature);
+        self::assertEquals($value, $signature);
         self::assertTrue($signature->equalToString($value));
         self::assertFalse($signature->equalToString('test'));
     }
 
     /**
+     * @dataProvider emptyStringDataProvider
+     *
+     * @param string $value
+     *
      * @throws InvalidSignatureException
      */
-    public function testEmptyValue()
+    public function testEmptyValue(string $value)
     {
         self::expectException(InvalidSignatureException::class);
         self::expectExceptionMessage('Signature should not be blank.');
 
-        new Signature(' ');
+        new Signature($value);
     }
 
     /**

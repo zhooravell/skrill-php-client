@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\ValueObject;
 
-use PHPUnit\Framework\TestCase;
 use Skrill\ValueObject\TransactionID;
 use Skrill\Exception\InvalidTransactionIDException;
 
 /**
  * Class TransactionIDTest.
  */
-class TransactionIDTest extends TestCase
+class TransactionIDTest extends StringValueObjectTestCase
 {
     /**
      * @throws InvalidTransactionIDException
@@ -19,19 +18,30 @@ class TransactionIDTest extends TestCase
     public function testSuccess()
     {
         $value = 'test123';
-        $authKey = new TransactionID($value);
 
-        self::assertEquals($value, (string) $authKey);
+        self::assertEquals($value, new TransactionID($value));
     }
 
     /**
      * @throws InvalidTransactionIDException
      */
-    public function testEmptyValue()
+    public function testSuccess2()
+    {
+        self::assertEquals('test123', new TransactionID(' test123 '));
+    }
+
+    /**
+     * @dataProvider emptyStringDataProvider
+     *
+     * @param string $value
+     *
+     * @throws InvalidTransactionIDException
+     */
+    public function testEmptyValue(string $value)
     {
         self::expectException(InvalidTransactionIDException::class);
         self::expectExceptionMessage('Skrill transaction ID should not be blank.');
 
-        new TransactionID(' ');
+        new TransactionID($value);
     }
 }

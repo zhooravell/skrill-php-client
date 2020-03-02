@@ -31,7 +31,7 @@ final class SecretWord
             throw InvalidSecretWordException::emptySecretWord();
         }
 
-        if (mb_strlen($value) > self::MAX_LENGTH) {
+        if (strlen($value) > self::MAX_LENGTH) {
             throw InvalidSecretWordException::invalidMaxLength();
         }
 

@@ -6,7 +6,9 @@ namespace Skrill\Tests;
 
 use GuzzleHttp\Client;
 use Skrill\SkrillClient;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Skrill\ValueObject\Email;
 use Skrill\Factory\SidFactory;
@@ -30,12 +32,12 @@ class SkrillClientExecutePayoutTest extends TestCase
     /**
      * @var HandlerStack
      */
-    private $successOnDemandMockHandler;
+    private $successPayoutMockHandler;
 
     /**
      * @var HandlerStack
      */
-    private $failOnDemandMockHandler;
+    private $failPayoutMockHandler;
 
     /**
      * @var DecimalMoneyParser
@@ -49,14 +51,26 @@ class SkrillClientExecutePayoutTest extends TestCase
      * @throws InvalidSidException
      * @throws SkrillException
      */
-    public function testExecuteOnDemandSuccess()
+    public function testExecutePayoutSuccess()
     {
-        $client = new Client(['handler' => $this->successOnDemandMockHandler]);
+        $container = [];
+        $history = Middleware::history($container);
+        $handlerStack = HandlerStack::create($this->successPayoutMockHandler);
+        $handlerStack->push($history);
+
+        $client = new Client(['handler' => $handlerStack]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
         $result = $client->executePayout(SidFactory::createFromString('test-sid'));
 
-        self::assertEquals('2451071245', (string)$result->get('id'));
+        self::assertEquals('2451071245', $result->get('id'));
+        self::assertCount(1, $container); // should be one request
+        /** @var Request $request */
+        $request = $container[0]['request'];
+        self::assertInstanceOf(Request::class, $request);
+        self::assertEquals('POST', $request->getMethod());
+        self::assertEquals('https://www.skrill.com/app/pay.pl', $request->getUri());
+        self::assertEquals('action=transfer&sid=test-sid', $request->getBody()->getContents());
     }
 
     /**
@@ -66,11 +80,11 @@ class SkrillClientExecutePayoutTest extends TestCase
      * @throws InvalidSidException
      * @throws SkrillException
      */
-    public function testExecuteOnDemandFail()
+    public function testExecutePayoutFail()
     {
         self::expectException(SkrillResponseException::class);
 
-        $client = new Client(['handler' => $this->failOnDemandMockHandler]);
+        $client = new Client(['handler' => $this->failPayoutMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
         $client->executePayout(SidFactory::createFromString('test-sid'));
@@ -106,10 +120,10 @@ XML;
 XML;
 
         $this->parser = new DecimalMoneyParser(new ISOCurrencies());
-        $this->successOnDemandMockHandler = HandlerStack::create(
+        $this->successPayoutMockHandler = HandlerStack::create(
             new MockHandler([new Response(200, [], $successXML)])
         );
-        $this->failOnDemandMockHandler = HandlerStack::create(
+        $this->failPayoutMockHandler = HandlerStack::create(
             new MockHandler([new Response(200, [], $failedXML)])
         );
     }

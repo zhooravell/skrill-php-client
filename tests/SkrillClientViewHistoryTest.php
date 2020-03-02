@@ -9,7 +9,9 @@ use Exception;
 use ArrayObject;
 use GuzzleHttp\Client;
 use Skrill\SkrillClient;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Skrill\ValueObject\Email;
 use PHPUnit\Framework\TestCase;
@@ -50,12 +52,24 @@ class SkrillClientViewHistoryTest extends TestCase
      */
     public function testViewHistorySuccess()
     {
-        $client = new Client(['handler' => $this->successHistoryMockHandler]);
+        $container = [];
+        $history = Middleware::history($container);
+        $handlerStack = HandlerStack::create($this->successHistoryMockHandler);
+        $handlerStack->push($history);
+
+        $client = new Client(['handler' => $handlerStack]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
         $history = $client->viewHistory(new DateTime('2018-01-01'));
 
         self::assertInstanceOf(ArrayObject::class, $history);
         self::assertCount(3, $history);
+        self::assertCount(1, $container); // should be one request
+        /** @var Request $request */
+        $request = $container[0]['request'];
+        self::assertInstanceOf(Request::class, $request);
+        self::assertEquals('POST', $request->getMethod());
+        self::assertEquals('https://www.skrill.com/app/query.pl', $request->getUri());
+        self::assertEquals('email=test%40test.com&password=3ade3fd6e8eef84f2ea91f6474be10d9&action=history&start_date=01-01-2018', $request->getBody()->getContents());
     }
 
     /**

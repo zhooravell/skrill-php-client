@@ -28,7 +28,7 @@ final class CompanyName
     {
         $value = trim($value);
 
-        if (mb_strlen($value) > self::MAX_LENGTH) {
+        if (strlen($value) > self::MAX_LENGTH) {
             throw InvalidCompanyNameException::invalidMaxLength();
         }
 

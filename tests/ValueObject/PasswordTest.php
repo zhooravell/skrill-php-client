@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\ValueObject;
 
-use PHPUnit\Framework\TestCase;
 use Skrill\ValueObject\Password;
 use Skrill\Exception\InvalidPasswordException;
 
 /**
  * Class PasswordTest.
  */
-class PasswordTest extends TestCase
+class PasswordTest extends StringValueObjectTestCase
 {
     /**
      * @throws InvalidPasswordException
@@ -19,9 +18,16 @@ class PasswordTest extends TestCase
     public function testSuccess()
     {
         $value = 'a1234567';
-        $secretWord = new Password($value);
 
-        self::assertEquals($value, (string) $secretWord);
+        self::assertEquals($value, new Password($value));
+    }
+
+    /**
+     * @throws InvalidPasswordException
+     */
+    public function testSuccess2()
+    {
+        self::assertEquals('a1234567', new Password(' a1234567 '));
     }
 
     /**
@@ -36,14 +42,18 @@ class PasswordTest extends TestCase
     }
 
     /**
+     * @dataProvider emptyStringDataProvider
+     *
+     * @param string $value
+     *
      * @throws InvalidPasswordException
      */
-    public function testEmpty()
+    public function testEmpty(string $value)
     {
         self::expectException(InvalidPasswordException::class);
         self::expectExceptionMessage('Skrill API/MQI password is too short. It should have 8 characters or more.');
 
-        new Password(' ');
+        new Password($value);
     }
 
     /**

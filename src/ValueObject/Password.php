@@ -32,7 +32,7 @@ final class Password
     {
         $value = trim($value);
 
-        if (mb_strlen($value) < self::MIN_LENGTH) {
+        if (strlen($value) < self::MIN_LENGTH) {
             throw InvalidPasswordException::invalidMinLength();
         }
 

@@ -23,7 +23,6 @@ final class Url
      */
     public function __construct(string $value)
     {
-        $value = trim($value);
         $value = filter_var($value, FILTER_SANITIZE_URL);
 
         if (!filter_var($value, FILTER_VALIDATE_URL)) {

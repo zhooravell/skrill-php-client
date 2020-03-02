@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\ValueObject;
 
-use PHPUnit\Framework\TestCase;
 use Skrill\ValueObject\RecurringBillingNote;
 use Skrill\Exception\InvalidRecurringBillingNoteException;
 
 /**
  * Class RecurringBillingNoteTest.
  */
-class RecurringBillingNoteTest extends TestCase
+class RecurringBillingNoteTest extends StringValueObjectTestCase
 {
     /**
      * @throws InvalidRecurringBillingNoteException
@@ -19,19 +18,30 @@ class RecurringBillingNoteTest extends TestCase
     public function testSuccess()
     {
         $value = 'test123';
-        $secretWord = new RecurringBillingNote($value);
 
-        self::assertEquals($value, (string) $secretWord);
+        self::assertEquals($value, new RecurringBillingNote($value));
     }
 
     /**
      * @throws InvalidRecurringBillingNoteException
      */
-    public function testEmptyValue()
+    public function testSuccess2()
+    {
+        self::assertEquals('test123', new RecurringBillingNote(' test123 '));
+    }
+
+    /**
+     * @dataProvider emptyStringDataProvider
+     *
+     * @param string $value
+     *
+     * @throws InvalidRecurringBillingNoteException
+     */
+    public function testEmptyValue(string $value)
     {
         self::expectException(InvalidRecurringBillingNoteException::class);
         self::expectExceptionMessage('Skrill recurring billing note should not be blank.');
 
-        new RecurringBillingNote(' ');
+        new RecurringBillingNote($value);
     }
 }
