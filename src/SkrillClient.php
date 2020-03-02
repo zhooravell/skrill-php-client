@@ -7,7 +7,6 @@ namespace Skrill;
 use ArrayObject;
 use LimitIterator;
 use SplFileObject;
-use DateTimeImmutable;
 use DateTimeInterface;
 use Skrill\ValueObject\Sid;
 use Skrill\ValueObject\Url;
@@ -17,7 +16,6 @@ use Skrill\Factory\SidFactory;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\ClientInterface;
 use Skrill\Request\SaleRequest;
-use Skrill\Response\HistoryItem;
 use Skrill\ValueObject\Password;
 use Skrill\Request\PayoutRequest;
 use Skrill\Request\RefundRequest;
@@ -25,6 +23,7 @@ use Skrill\Request\TransferRequest;
 use Skrill\Factory\ResponseFactory;
 use Skrill\Request\OnDemandRequest;
 use Skrill\ValueObject\CompanyName;
+use Skrill\Factory\HistoryItemFactory;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use Skrill\Exception\SkrillResponseException;
@@ -280,45 +279,7 @@ final class SkrillClient implements
         $tmpFile->setFlags(SplFileObject::READ_CSV | SplFileObject::READ_AHEAD | SplFileObject::SKIP_EMPTY);
 
         foreach (new LimitIterator($tmpFile, 1) as $row) {
-            [
-                ,
-                $time,
-                $type,
-                $details,
-                $lesion,
-                $profit,
-                $status,
-                $balance,
-                $reference,
-                $amount,
-                $currency,
-                $info,
-                $skrillId,
-                $paymentType,
-            ] = $row;
-            $datetime = DateTimeImmutable::createFromFormat('d M y H:i', $time);
-
-            if (!$datetime instanceof DateTimeImmutable) {
-                throw SkrillResponseException::fromSkillError(sprintf('Invalid time "%s".', $time));
-            }
-
-            $result->append(
-                new HistoryItem(
-                    $reference,
-                    $skrillId,
-                    $datetime,
-                    $type,
-                    $details,
-                    $lesion,
-                    $profit,
-                    $status,
-                    $balance,
-                    $amount,
-                    $currency,
-                    $info,
-                    $paymentType
-                )
-            );
+            $result->append(HistoryItemFactory::createFromRow($row));
         }
 
         unlink($tmpFile->getPathname());

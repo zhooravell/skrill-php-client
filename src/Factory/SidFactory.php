@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Skrill\Factory;
 
+use Exception;
+use SimpleXMLElement;
 use DateTimeImmutable;
 use Skrill\ValueObject\Sid;
 use Psr\Http\Message\ResponseInterface;
@@ -21,7 +23,7 @@ final class SidFactory
      * @return Sid
      *
      * @throws InvalidSidException
-     * @throws \Exception
+     * @throws Exception
      */
     public static function createFromString(string $value): Sid
     {
@@ -38,7 +40,7 @@ final class SidFactory
      */
     public static function createFromXMLResponse(ResponseInterface $response): Sid
     {
-        $xml = new \SimpleXMLElement($response->getBody()->getContents());
+        $xml = new SimpleXMLElement($response->getBody()->getContents());
 
         if ($xml->xpath('error/error_msg')) {
             throw SkrillResponseException::fromSkillError((strval($xml->error->error_msg)));
