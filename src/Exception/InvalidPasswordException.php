@@ -17,7 +17,9 @@ final class InvalidPasswordException extends Exception implements SkrillExceptio
      */
     public static function invalidMinLength(): self
     {
-        return new self(sprintf('Skrill API/MQI password is too short. It should have %d characters or more.', Password::MIN_LENGTH));
+        return new self(
+            sprintf('Skrill API/MQI password is too short. It should have %d characters or more.', Password::MIN_LENGTH)
+        );
     }
 
     /**

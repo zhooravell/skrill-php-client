@@ -17,6 +17,8 @@ final class InvalidCompanyNameException extends Exception implements SkrillExcep
      */
     public static function invalidMaxLength(): self
     {
-        return new self(sprintf('The length of company name should not exceed %d characters.', CompanyName::MAX_LENGTH));
+        return new self(
+            sprintf('The length of company name should not exceed %d characters.', CompanyName::MAX_LENGTH)
+        );
     }
 }

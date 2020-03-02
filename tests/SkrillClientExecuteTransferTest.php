@@ -97,20 +97,23 @@ class SkrillClientExecuteTransferTest extends TestCase
 
         $response = $this->createMock(ResponseInterface::class);
         $responseBody = $this->createMock(StreamInterface::class);
+
+        $contents = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response>
+    <transaction>
+        <amount>0.50</amount>
+        <currency>USD</currency>
+        <id>2451071245</id>
+        <status>2</status>
+        <status_msg>processed</status_msg>
+    </transaction>
+</response>
+XML;
+
         $responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn(
-                '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-                        <response>
-                            <transaction>
-                                <amount>0.50</amount>
-                                <currency>USD</currency>
-                                <id>2451071245</id>
-                                <status>2</status>
-                                <status_msg>processed</status_msg>
-                            </transaction>
-                        </response>'
-            );
+            ->willReturn($contents);
 
         $response->expects(self::once())
             ->method('getBody')
@@ -119,17 +122,20 @@ class SkrillClientExecuteTransferTest extends TestCase
         $client
             ->expects(self::once())
             ->method('request')
-            ->with('POST', 'https://www.skrill.com/app/pay.pl', [
-                'form_params' => [
-                    'action' => 'transfer',
-                    'sid' => $sid,
-                ],
-                'headers' => [
-                    'Accept' => 'text/xml',
-                ],
-            ])
-            ->willReturn($response)
-        ;
+            ->with(
+                'POST',
+                'https://www.skrill.com/app/pay.pl',
+                [
+                    'form_params' => [
+                        'action' => 'transfer',
+                        'sid' => $sid,
+                    ],
+                    'headers' => [
+                        'Accept' => 'text/xml',
+                    ],
+                ]
+            )
+            ->willReturn($response);
 
         $client = new SkrillClient($client, new Email($email), new Password($password));
 
@@ -144,29 +150,43 @@ class SkrillClientExecuteTransferTest extends TestCase
         parent::setUp();
 
         $this->parser = new DecimalMoneyParser(new ISOCurrencies());
-        $this->successTransferMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-                        <response>
-                            <transaction>
-                                <amount>0.50</amount>
-                                <currency>USD</currency>
-                                <id>2451071245</id>
-                                <status>2</status>
-                                <status_msg>processed</status_msg>
-                            </transaction>
-                        </response>'
-            ),
-        ]));
 
-        $this->failTransferMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '<?xml version="1.0" encoding="UTF-8"?><response><error><error_msg>SESSION_EXPIRED</error_msg></error></response>'
-            ),
-        ]));
+        $successBody = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response>
+    <transaction>
+        <amount>0.50</amount>
+        <currency>USD</currency>
+        <id>2451071245</id>
+        <status>2</status>
+        <status_msg>processed</status_msg>
+    </transaction>
+</response>
+XML;
+        
+        $this->successTransferMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(200, [], $successBody),
+                ]
+            )
+        );
+
+        $failBody = <<<'XML'
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+    <error>
+        <error_msg>SESSION_EXPIRED</error_msg>
+    </error>
+</response>
+XML;
+
+        $this->failTransferMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(200, [], $failBody),
+                ]
+            )
+        );
     }
 }

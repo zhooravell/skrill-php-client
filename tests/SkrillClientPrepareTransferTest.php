@@ -69,7 +69,7 @@ class SkrillClientPrepareTransferTest extends TestCase
 
         $sid = $client->prepareTransfer($request);
 
-        self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', (string) $sid);
+        self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', $sid);
     }
 
     /**
@@ -119,7 +119,9 @@ class SkrillClientPrepareTransferTest extends TestCase
         $responseBody = $this->createMock(StreamInterface::class);
         $responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn('<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>');
+            ->willReturn(
+                '<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>'
+            );
 
         $response->expects(self::once())
             ->method('getBody')
@@ -128,23 +130,26 @@ class SkrillClientPrepareTransferTest extends TestCase
         $client
             ->expects(self::once())
             ->method('request')
-            ->with('POST', 'https://www.skrill.com/app/pay.pl', [
-                'form_params' => [
-                    'action' => 'prepare',
-                    'bnf_email' => $bnfEmail,
-                    'currency' => $currency,
-                    'amount' => $amount,
-                    'subject' => $subject,
-                    'note' => $note,
-                    'email' => $email,
-                    'password' => md5($password),
-                ],
-                'headers' => [
-                    'Accept' => 'text/xml',
-                ],
-            ])
-            ->willReturn($response)
-        ;
+            ->with(
+                'POST',
+                'https://www.skrill.com/app/pay.pl',
+                [
+                    'form_params' => [
+                        'action' => 'prepare',
+                        'bnf_email' => $bnfEmail,
+                        'currency' => $currency,
+                        'amount' => $amount,
+                        'subject' => $subject,
+                        'note' => $note,
+                        'email' => $email,
+                        'password' => md5($password),
+                    ],
+                    'headers' => [
+                        'Accept' => 'text/xml',
+                    ],
+                ]
+            )
+            ->willReturn($response);
 
         $request = new TransferRequest(
             new Email($bnfEmail),
@@ -165,20 +170,37 @@ class SkrillClientPrepareTransferTest extends TestCase
         parent::setUp();
 
         $this->parser = new DecimalMoneyParser(new ISOCurrencies());
-        $this->successTransferMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>'
-            ),
-        ]));
 
-        $this->failTransferMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '<?xml version="1.0" encoding="UTF-8"?><response><error><error_msg>MISSING_AMOUNT</error_msg></error></response>'
-            ),
-        ]));
+        $successBody = <<<'XML'
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+    <sid>5e281d1376d92ba789ca7f0583e045d4</sid>
+</response>
+XML;
+
+        $this->successTransferMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(200, [], $successBody),
+                ]
+            )
+        );
+
+        $failBody = <<<'XML'
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+    <error>
+        <error_msg>MISSING_AMOUNT</error_msg>
+    </error>
+</response>
+XML;
+
+        $this->failTransferMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(200, [], $failBody),
+                ]
+            )
+        );
     }
 }

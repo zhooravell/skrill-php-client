@@ -1,0 +1,4 @@
+"ID","Time (CET)","Type","Transaction Details","[-] USD","[+] USD","Status","balance","Reference","Amount Sent","Currency sent","More information","ID of the corresponding Skrill transaction","Payment Type"
+"2450853010","02 Aug 18 09:55","Send Money","to nkoptel@centrobill.com",".5","","processed","558.513759","","0.5","USD","Test trasfer subject","2450853001","WLT"
+"2450853011","02 Aug 18 09:55","Send Money","Fee",".01","","processed","558.503759","","","","","2450853001",""
+"2450870079","02 Aug 18 10:21","Send Money","to nkoptel@centrobill.com",".5","","processed","558.003759","","0.5","USD","Test trasfer subject","2450870067","WLT"

@@ -30,7 +30,21 @@ class HistoryItemTest extends TestCase
         $skrillId = '2450853001';
         $paymentType = 'WLT';
 
-        $item = new HistoryItem($reference, $skrillId, $time, $type, $details, $lesion, $profit, $status, $balance, $amount, $currency, $info, $paymentType);
+        $item = new HistoryItem(
+            $reference,
+            $skrillId,
+            $time,
+            $type,
+            $details,
+            $lesion,
+            $profit,
+            $status,
+            $balance,
+            $amount,
+            $currency,
+            $info,
+            $paymentType
+        );
 
         self::assertEquals($time, $item->getTime());
         self::assertEquals($type, $item->getType());

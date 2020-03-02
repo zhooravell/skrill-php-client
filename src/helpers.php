@@ -8,7 +8,7 @@ if (!function_exists('getSkillSupportsCountries')) {
      */
     function getSkillSupportsCountries(): array
     {
-        return include __DIR__.'/../resources/iso-3166-1-alpha-3-countries-skill-supports.php';
+        return include __DIR__ . '/../resources/iso-3166-1-alpha-3-countries-skill-supports.php';
     }
 }
 
@@ -18,6 +18,6 @@ if (!function_exists('getSkillSupportsLanguages')) {
      */
     function getSkillSupportsLanguages(): array
     {
-        return include __DIR__.'/../resources/iso-6391-languages-skrill-supports.php';
+        return include __DIR__ . '/../resources/iso-6391-languages-skrill-supports.php';
     }
 }

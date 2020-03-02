@@ -64,13 +64,15 @@ class SkrillClientPrepareOnDemandTest extends TestCase
         $client = new Client(['handler' => $this->successOnDemandMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
-        $sid = $client->prepareOnDemand(new OnDemandRequest(
-            new RecurringPaymentID('111'),
-            new TransactionID(22),
-            $this->parser->parse('10', 'EUR')
-        ));
+        $sid = $client->prepareOnDemand(
+            new OnDemandRequest(
+                new RecurringPaymentID('111'),
+                new TransactionID(22),
+                $this->parser->parse('10', 'EUR')
+            )
+        );
 
-        self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', (string) $sid);
+        self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', (string)$sid);
     }
 
     /**
@@ -88,11 +90,13 @@ class SkrillClientPrepareOnDemandTest extends TestCase
         $client = new Client(['handler' => $this->failOnDemandMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
-        $client->prepareOnDemand(new OnDemandRequest(
-            new RecurringPaymentID('111'),
-            new TransactionID(22),
-            $this->parser->parse('10', 'EUR')
-        ));
+        $client->prepareOnDemand(
+            new OnDemandRequest(
+                new RecurringPaymentID('111'),
+                new TransactionID(22),
+                $this->parser->parse('10', 'EUR')
+            )
+        );
     }
 
     /**
@@ -119,7 +123,9 @@ class SkrillClientPrepareOnDemandTest extends TestCase
         $responseBody = $this->createMock(StreamInterface::class);
         $responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn('<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>');
+            ->willReturn(
+                '<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>'
+            );
 
         $response->expects(self::once())
             ->method('getBody')
@@ -128,22 +134,25 @@ class SkrillClientPrepareOnDemandTest extends TestCase
         $client
             ->expects(self::once())
             ->method('request')
-            ->with('POST', 'https://www.skrill.com/app/ondemand_request.pl', [
-                'form_params' => [
-                    'action' => 'prepare',
-                    'frn_trn_id' => $transactionId,
-                    'currency' => $currency,
-                    'amount' => $amount,
-                    'rec_payment_id' => $recurringPaymentId,
-                    'email' => $email,
-                    'password' => md5($password),
-                ],
-                'headers' => [
-                    'Accept' => 'text/xml',
-                ],
-            ])
-            ->willReturn($response)
-        ;
+            ->with(
+                'POST',
+                'https://www.skrill.com/app/ondemand_request.pl',
+                [
+                    'form_params' => [
+                        'action' => 'prepare',
+                        'frn_trn_id' => $transactionId,
+                        'currency' => $currency,
+                        'amount' => $amount,
+                        'rec_payment_id' => $recurringPaymentId,
+                        'email' => $email,
+                        'password' => md5($password),
+                    ],
+                    'headers' => [
+                        'Accept' => 'text/xml',
+                    ],
+                ]
+            )
+            ->willReturn($response);
 
         $request = new OnDemandRequest(
             new RecurringPaymentID($recurringPaymentId),
@@ -163,20 +172,36 @@ class SkrillClientPrepareOnDemandTest extends TestCase
         parent::setUp();
 
         $this->parser = new DecimalMoneyParser(new ISOCurrencies());
-        $this->successOnDemandMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>'
-            ),
-        ]));
+        $this->successOnDemandMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(
+                        200,
+                        [],
+                        '<?xml version="1.0" encoding="UTF-8"?>
+                                <response>
+                                    <sid>5e281d1376d92ba789ca7f0583e045d4</sid>
+                                </response>'
+                    ),
+                ]
+            )
+        );
 
-        $this->failOnDemandMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '<?xml version="1.0" encoding="UTF-8"?><response><error><error_msg>MISSING_AMOUNT</error_msg></error></response>'
-            ),
-        ]));
+        $this->failOnDemandMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(
+                        200,
+                        [],
+                        '<?xml version="1.0" encoding="UTF-8"?>
+                                <response>
+                                    <error>
+                                        <error_msg>MISSING_AMOUNT</error_msg>
+                                    </error>
+                                </response>'
+                    ),
+                ]
+            )
+        );
     }
 }

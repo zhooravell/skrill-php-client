@@ -31,7 +31,7 @@ class ResponseFactoryFromRefundTest extends TestCase
     {
         $this->responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn(file_get_contents(__DIR__.'/DataFixtures/success_refund.xml'));
+            ->willReturn(file_get_contents(__DIR__ . '/DataFixtures/success_refund.xml'));
 
         $response = ResponseFactory::createFromRefundResponse($this->response);
 
@@ -52,7 +52,7 @@ class ResponseFactoryFromRefundTest extends TestCase
 
         $this->responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn(file_get_contents(__DIR__.'/DataFixtures/error.xml'));
+            ->willReturn(file_get_contents(__DIR__ . '/DataFixtures/error.xml'));
 
         ResponseFactory::createFromRefundResponse($this->response);
     }
@@ -67,7 +67,7 @@ class ResponseFactoryFromRefundTest extends TestCase
 
         $this->responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn(file_get_contents(__DIR__.'/DataFixtures/invalid_refund_format.xml'));
+            ->willReturn(file_get_contents(__DIR__ . '/DataFixtures/invalid_refund_format.xml'));
 
         ResponseFactory::createFromRefundResponse($this->response);
     }
@@ -79,7 +79,7 @@ class ResponseFactoryFromRefundTest extends TestCase
     {
         $this->responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn(file_get_contents(__DIR__.'/DataFixtures/refund_with_error.xml'));
+            ->willReturn(file_get_contents(__DIR__ . '/DataFixtures/refund_with_error.xml'));
 
         $response = ResponseFactory::createFromRefundResponse($this->response);
 

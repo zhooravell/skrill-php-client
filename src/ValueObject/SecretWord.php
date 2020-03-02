@@ -14,9 +14,9 @@ use Skrill\ValueObject\Traits\ValueToStringTrait;
  */
 final class SecretWord
 {
-    const MAX_LENGTH = 10;
-
     use ValueToStringTrait;
+
+    public const MAX_LENGTH = 10;
 
     /**
      * @param string $value

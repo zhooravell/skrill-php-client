@@ -118,17 +118,20 @@ class SkrillClientExecuteRefundTest extends TestCase
         $client
             ->expects(self::once())
             ->method('request')
-            ->with('POST', 'https://www.skrill.com/app/refund.pl', [
-                'form_params' => [
-                    'action' => 'refund',
-                    'sid' => $sid,
-                ],
-                'headers' => [
-                    'Accept' => 'text/xml',
-                ],
-            ])
-            ->willReturn($response)
-        ;
+            ->with(
+                'POST',
+                'https://www.skrill.com/app/refund.pl',
+                [
+                    'form_params' => [
+                        'action' => 'refund',
+                        'sid' => $sid,
+                    ],
+                    'headers' => [
+                        'Accept' => 'text/xml',
+                    ],
+                ]
+            )
+            ->willReturn($response);
 
         $client = new SkrillClient($client, new Email($email), new Password($password));
 
@@ -143,11 +146,13 @@ class SkrillClientExecuteRefundTest extends TestCase
         parent::setUp();
 
         $this->parser = new DecimalMoneyParser(new ISOCurrencies());
-        $this->successRefundMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '<?xml version="1.0" encoding="UTF-8"?>
+        $this->successRefundMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(
+                        200,
+                        [],
+                        '<?xml version="1.0" encoding="UTF-8"?>
                         <response>
                             <mb_amount>1.000000</mb_amount>
                             <mb_currency>USD</mb_currency>
@@ -156,15 +161,26 @@ class SkrillClientExecuteRefundTest extends TestCase
                             <status>2</status>
                             <transaction_id>e40a8e22-016e-4687-870c-f073631e3131</transaction_id>
                         </response>'
-            ),
-        ]));
+                    ),
+                ]
+            )
+        );
 
-        $this->failRefundMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '<?xml version="1.0" encoding="UTF-8"?><response><error><error_msg>SESSION_EXPIRED</error_msg></error></response>'
-            ),
-        ]));
+        $this->failRefundMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(
+                        200,
+                        [],
+                        '<?xml version="1.0" encoding="UTF-8"?>
+                                <response>
+                                    <error>
+                                        <error_msg>SESSION_EXPIRED</error_msg>
+                                    </error>
+                                </response>'
+                    ),
+                ]
+            )
+        );
     }
 }

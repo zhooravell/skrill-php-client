@@ -66,11 +66,26 @@ class SkrillClientPrepareSaleTest extends TestCase
      */
     public function testImplementation()
     {
-        self::assertInstanceOf(SkrillHistoryClientInterface::class, new SkrillClient(new Client(), new Email('test@test.com'), new Password('q1234567')));
-        self::assertInstanceOf(SkrillOnDemandClientInterface::class, new SkrillClient(new Client(), new Email('test@test.com'), new Password('q1234567')));
-        self::assertInstanceOf(SkrillSaleClientInterface::class, new SkrillClient(new Client(), new Email('test@test.com'), new Password('q1234567')));
-        self::assertInstanceOf(SkrillTransferClientInterface::class, new SkrillClient(new Client(), new Email('test@test.com'), new Password('q1234567')));
-        self::assertInstanceOf(SkrillRefundClientInterface::class, new SkrillClient(new Client(), new Email('test@test.com'), new Password('q1234567')));
+        self::assertInstanceOf(
+            SkrillHistoryClientInterface::class,
+            new SkrillClient(new Client(), new Email('test@test.com'), new Password('q1234567'))
+        );
+        self::assertInstanceOf(
+            SkrillOnDemandClientInterface::class,
+            new SkrillClient(new Client(), new Email('test@test.com'), new Password('q1234567'))
+        );
+        self::assertInstanceOf(
+            SkrillSaleClientInterface::class,
+            new SkrillClient(new Client(), new Email('test@test.com'), new Password('q1234567'))
+        );
+        self::assertInstanceOf(
+            SkrillTransferClientInterface::class,
+            new SkrillClient(new Client(), new Email('test@test.com'), new Password('q1234567'))
+        );
+        self::assertInstanceOf(
+            SkrillRefundClientInterface::class,
+            new SkrillClient(new Client(), new Email('test@test.com'), new Password('q1234567'))
+        );
     }
 
     /**
@@ -85,13 +100,14 @@ class SkrillClientPrepareSaleTest extends TestCase
         $client = new Client(['handler' => $this->successSaleMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
-        $sid = $client->prepareSale(new SaleRequest(
+        $sid = $client->prepareSale(
+            new SaleRequest(
                 new TransactionID('123'),
                 $this->parser->parse('10.5', 'EUR')
             )
         );
 
-        self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', (string) $sid);
+        self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', (string)$sid);
     }
 
     /**
@@ -135,7 +151,9 @@ class SkrillClientPrepareSaleTest extends TestCase
         $responseBody = $this->createMock(StreamInterface::class);
         $responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn('<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>');
+            ->willReturn(
+                '<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>'
+            );
 
         $response->expects(self::once())
             ->method('getBody')
@@ -144,20 +162,23 @@ class SkrillClientPrepareSaleTest extends TestCase
         $client
             ->expects(self::once())
             ->method('request')
-            ->with('POST', 'https://pay.skrill.com', [
-                'form_params' => [
-                    'transaction_id' => (string) $transactionId,
-                    'currency' => $currency,
-                    'amount' => $amount,
-                    'prepare_only' => 1,
-                    'pay_to_email' => $email,
-                ],
-                'headers' => [
-                    'Accept' => 'text/xml',
-                ],
-            ])
-            ->willReturn($response)
-        ;
+            ->with(
+                'POST',
+                'https://pay.skrill.com',
+                [
+                    'form_params' => [
+                        'transaction_id' => (string)$transactionId,
+                        'currency' => $currency,
+                        'amount' => $amount,
+                        'prepare_only' => 1,
+                        'pay_to_email' => $email,
+                    ],
+                    'headers' => [
+                        'Accept' => 'text/xml',
+                    ],
+                ]
+            )
+            ->willReturn($response);
 
         $client = new SkrillClient($client, new Email($email), new Password('q1234567'));
         $request = new SaleRequest($transactionId, $this->parser->parse(strval($amount), 'EUR'));
@@ -194,7 +215,9 @@ class SkrillClientPrepareSaleTest extends TestCase
         $responseBody = $this->createMock(StreamInterface::class);
         $responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn('<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>');
+            ->willReturn(
+                '<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>'
+            );
 
         $response->expects(self::once())
             ->method('getBody')
@@ -203,36 +226,44 @@ class SkrillClientPrepareSaleTest extends TestCase
         $client
             ->expects(self::once())
             ->method('request')
-            ->with('POST', 'https://pay.skrill.com', [
-                'form_params' => [
-                    'transaction_id' => (string) $transactionId,
-                    'currency' => $currency,
-                    'amount' => $amount,
-                    'prepare_only' => 1,
-                    'pay_to_email' => $email,
-                    'recipient_description' => $company,
-                    'language' => $lang,
-                    'pay_from_email' => $customerEmail,
-                    'detail1_description' => 'Product ID:',
-                    'detail1_text' => '4509334',
-                    'logo_url' => 'https://google.com',
-                    'status_url' => 'https://google.com/3',
-                ],
-                'headers' => [
-                    'Accept' => 'text/xml',
-                ],
-            ])
-            ->willReturn($response)
-        ;
+            ->with(
+                'POST',
+                'https://pay.skrill.com',
+                [
+                    'form_params' => [
+                        'transaction_id' => (string)$transactionId,
+                        'currency' => $currency,
+                        'amount' => $amount,
+                        'prepare_only' => 1,
+                        'pay_to_email' => $email,
+                        'recipient_description' => $company,
+                        'language' => $lang,
+                        'pay_from_email' => $customerEmail,
+                        'detail1_description' => 'Product ID:',
+                        'detail1_text' => '4509334',
+                        'logo_url' => 'https://google.com',
+                        'status_url' => 'https://google.com/3',
+                    ],
+                    'headers' => [
+                        'Accept' => 'text/xml',
+                    ],
+                ]
+            )
+            ->willReturn($response);
 
-        $client = new SkrillClient($client, new Email($email), new Password('q1234567'), new Url('https://google.com'), new CompanyName($company));
+        $client = new SkrillClient(
+            $client,
+            new Email($email),
+            new Password('q1234567'),
+            new Url('https://google.com'),
+            new CompanyName($company)
+        );
         $request = new SaleRequest($transactionId, $this->parser->parse(strval($amount), 'EUR'));
         $request
             ->setLang(new Language($lang))
             ->setPayFromEmail(new Email($customerEmail))
             ->setProductDescription(new Description($desc, $text))
-            ->setStatusUrl(new Url('https://google.com/3'))
-        ;
+            ->setStatusUrl(new Url('https://google.com/3'));
 
         $client->prepareSale($request);
     }
@@ -245,12 +276,23 @@ class SkrillClientPrepareSaleTest extends TestCase
         parent::setUp();
 
         $this->parser = new DecimalMoneyParser(new ISOCurrencies());
-        $this->successSaleMockHandler = HandlerStack::create(new MockHandler([
-            new Response(200, [], '5e281d1376d92ba789ca7f0583e045d4'),
-        ]));
-        $this->failSaleMockHandler = HandlerStack::create(new MockHandler([
-            new Response(200, [], '{"code":"BAD_REQUEST","message":"Already paid for 2451748842"}'
-            ),
-        ]));
+        $this->successSaleMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(200, [], '5e281d1376d92ba789ca7f0583e045d4'),
+                ]
+            )
+        );
+        $this->failSaleMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(
+                        200,
+                        [],
+                        '{"code":"BAD_REQUEST","message":"Already paid for 2451748842"}'
+                    ),
+                ]
+            )
+        );
     }
 }

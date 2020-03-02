@@ -25,7 +25,9 @@ final class InvalidSecretWordException extends Exception implements SkrillExcept
      */
     public static function invalidMaxLength(): self
     {
-        return new self(sprintf('The length of Skrill secret word should not exceed %d characters.', SecretWord::MAX_LENGTH));
+        return new self(
+            sprintf('The length of Skrill secret word should not exceed %d characters.', SecretWord::MAX_LENGTH)
+        );
     }
 
     /**

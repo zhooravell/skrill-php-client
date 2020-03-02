@@ -69,7 +69,10 @@ class SkrillClientViewHistoryTest extends TestCase
         self::assertInstanceOf(Request::class, $request);
         self::assertEquals('POST', $request->getMethod());
         self::assertEquals('https://www.skrill.com/app/query.pl', $request->getUri());
-        self::assertEquals('email=test%40test.com&password=3ade3fd6e8eef84f2ea91f6474be10d9&action=history&start_date=01-01-2018', $request->getBody()->getContents());
+        self::assertEquals(
+            'email=test%40test.com&password=3ade3fd6e8eef84f2ea91f6474be10d9&action=history&start_date=01-01-2018',
+            $request->getBody()->getContents()
+        );
     }
 
     /**
@@ -113,34 +116,40 @@ class SkrillClientViewHistoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->successHistoryMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '"ID","Time (CET)","Type","Transaction Details","[-] USD","[+] USD","Status","balance","Reference","Amount Sent","Currency sent","More information","ID of the corresponding Skrill transaction","Payment Type"
-"2450853010","02 Aug 18 09:55","Send Money","to nkoptel@centrobill.com",".5","","processed","558.513759","","0.5","USD","Test trasfer subject","2450853001","WLT"
-"2450853011","02 Aug 18 09:55","Send Money","Fee",".01","","processed","558.503759","","","","","2450853001",""
-"2450870079","02 Aug 18 10:21","Send Money","to nkoptel@centrobill.com",".5","","processed","558.003759","","0.5","USD","Test trasfer subject","2450870067","WLT"'
-            ),
-        ]));
+        $this->successHistoryMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(
+                        200,
+                        [],
+                        file_get_contents(__DIR__ . '/DataFixtures/success-history-body.csv')
+                    ),
+                ]
+            )
+        );
 
-        $this->invalidTimeHistoryMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '"ID","Time (CET)","Type","Transaction Details","[-] USD","[+] USD","Status","balance","Reference","Amount Sent","Currency sent","More information","ID of the corresponding Skrill transaction","Payment Type"
-"2450853010","02 Aug 18 09:55","Send Money","to nkoptel@centrobill.com",".5","","processed","558.513759","","0.5","USD","Test trasfer subject","2450853001","WLT"
-"2450853011","02 Aug 18 09:55","Send Money","Fee",".01","","processed","558.503759","","","","","2450853001",""
-"2450870079","TEST","Send Money","to nkoptel@centrobill.com",".5","","processed","558.003759","","0.5","USD","Test trasfer subject","2450870067","WLT"'
-            ),
-        ]));
+        $this->invalidTimeHistoryMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(
+                        200,
+                        [],
+                        file_get_contents(__DIR__ . '/DataFixtures/invalid-time-history-body.csv')
+                    ),
+                ]
+            )
+        );
 
-        $this->failHistoryMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '404		Illegal parameter value: 02-08-201'
-            ),
-        ]));
+        $this->failHistoryMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(
+                        200,
+                        [],
+                        '404		Illegal parameter value: 02-08-201'
+                    ),
+                ]
+            )
+        );
     }
 }

@@ -63,7 +63,7 @@ class SkrillClientPrepareRefundTest extends TestCase
 
         $sid = $client->prepareRefund(new RefundRequest(new TransactionID('test')));
 
-        self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', (string) $sid);
+        self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', $sid);
     }
 
     /**
@@ -103,7 +103,9 @@ class SkrillClientPrepareRefundTest extends TestCase
         $responseBody = $this->createMock(StreamInterface::class);
         $responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn('<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>');
+            ->willReturn(
+                '<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>'
+            );
 
         $response->expects(self::once())
             ->method('getBody')
@@ -112,19 +114,22 @@ class SkrillClientPrepareRefundTest extends TestCase
         $client
             ->expects(self::once())
             ->method('request')
-            ->with('POST', 'https://www.skrill.com/app/refund.pl', [
-                'form_params' => [
-                    'action' => 'prepare',
-                    'transaction_id' => $transactionId,
-                    'email' => $email,
-                    'password' => md5($password),
-                ],
-                'headers' => [
-                    'Accept' => 'text/xml',
-                ],
-            ])
-            ->willReturn($response)
-        ;
+            ->with(
+                'POST',
+                'https://www.skrill.com/app/refund.pl',
+                [
+                    'form_params' => [
+                        'action' => 'prepare',
+                        'transaction_id' => $transactionId,
+                        'email' => $email,
+                        'password' => md5($password),
+                    ],
+                    'headers' => [
+                        'Accept' => 'text/xml',
+                    ],
+                ]
+            )
+            ->willReturn($response);
 
         $client = new SkrillClient($client, new Email($email), new Password($password));
         $client->prepareRefund(new RefundRequest(new TransactionID($transactionId)));
@@ -138,20 +143,36 @@ class SkrillClientPrepareRefundTest extends TestCase
         parent::setUp();
 
         $this->parser = new DecimalMoneyParser(new ISOCurrencies());
-        $this->successRefundMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '<?xml version="1.0" encoding="UTF-8"?><response><sid>5e281d1376d92ba789ca7f0583e045d4</sid></response>'
-            ),
-        ]));
+        $this->successRefundMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(
+                        200,
+                        [],
+                        '<?xml version="1.0" encoding="UTF-8"?>
+                                <response>
+                                    <sid>5e281d1376d92ba789ca7f0583e045d4</sid>
+                                </response>'
+                    ),
+                ]
+            )
+        );
 
-        $this->failRefundMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '<?xml version="1.0" encoding="UTF-8"?><response><error><error_msg>MISSING_AMOUNT</error_msg></error></response>'
-            ),
-        ]));
+        $this->failRefundMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(
+                        200,
+                        [],
+                        '<?xml version="1.0" encoding="UTF-8"?>
+                                <response>
+                                    <error>
+                                        <error_msg>MISSING_AMOUNT</error_msg>
+                                    </error>
+                                </response>'
+                    ),
+                ]
+            )
+        );
     }
 }

@@ -13,8 +13,8 @@ class HelpersTest extends TestCase
 {
     public function testResourcesFilesExists()
     {
-        self::assertTrue(file_exists( __DIR__.'/../resources/iso-3166-1-alpha-3-countries-skill-supports.php'));
-        self::assertTrue(file_exists( __DIR__.'/../resources/iso-6391-languages-skrill-supports.php'));
+        self::assertTrue(file_exists(__DIR__ . '/../resources/iso-3166-1-alpha-3-countries-skill-supports.php'));
+        self::assertTrue(file_exists(__DIR__ . '/../resources/iso-6391-languages-skrill-supports.php'));
     }
 
     public function testGetSkillSupportsCountries()

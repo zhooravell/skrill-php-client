@@ -19,9 +19,9 @@ use Skrill\ValueObject\Traits\ValueToStringTrait;
  */
 final class Password
 {
-    const MIN_LENGTH = 8;
-
     use ValueToStringTrait;
+
+    public const MIN_LENGTH = 8;
 
     /**
      * @param string $value

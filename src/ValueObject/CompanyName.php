@@ -15,9 +15,9 @@ use Skrill\ValueObject\Traits\ValueToStringTrait;
  */
 final class CompanyName
 {
-    const MAX_LENGTH = 30;
-
     use ValueToStringTrait;
+
+    public const MAX_LENGTH = 30;
 
     /**
      * @param string $value

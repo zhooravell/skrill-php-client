@@ -60,7 +60,8 @@ final class SaleRequest
     }
 
     /**
-     * The detail1_description combined with the detail1_text is shown in the more information field of the merchant account history CSV file.
+     * The detail1_description combined with the detail1_text is shown in the more information field of the merchant
+     * account history CSV file.
      *
      * Example:
      * - detail1_description: "Product ID:"

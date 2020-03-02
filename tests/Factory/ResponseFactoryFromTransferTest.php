@@ -32,7 +32,7 @@ class ResponseFactoryFromTransferTest extends TestCase
     {
         $this->responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn(file_get_contents(__DIR__.'/DataFixtures/success_transaction.xml'));
+            ->willReturn(file_get_contents(__DIR__ . '/DataFixtures/success_transaction.xml'));
 
         $response = ResponseFactory::createFromTransferResponse($this->response);
 
@@ -53,7 +53,7 @@ class ResponseFactoryFromTransferTest extends TestCase
 
         $this->responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn(file_get_contents(__DIR__.'/DataFixtures/error.xml'));
+            ->willReturn(file_get_contents(__DIR__ . '/DataFixtures/error.xml'));
 
         ResponseFactory::createFromTransferResponse($this->response);
     }
@@ -68,7 +68,7 @@ class ResponseFactoryFromTransferTest extends TestCase
 
         $this->responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn(file_get_contents(__DIR__.'/DataFixtures/invalid_transaction_format.xml'));
+            ->willReturn(file_get_contents(__DIR__ . '/DataFixtures/invalid_transaction_format.xml'));
 
         ResponseFactory::createFromTransferResponse($this->response);
     }
@@ -80,7 +80,7 @@ class ResponseFactoryFromTransferTest extends TestCase
     {
         $this->responseBody->expects(self::once())
             ->method('getContents')
-            ->willReturn(file_get_contents(__DIR__.'/DataFixtures/transaction_with_error.xml'));
+            ->willReturn(file_get_contents(__DIR__ . '/DataFixtures/transaction_with_error.xml'));
 
         $response = ResponseFactory::createFromTransferResponse($this->response);
 

@@ -60,7 +60,7 @@ class SkrillClientExecuteOnDemandTest extends TestCase
 
         $result = $client->executeOnDemand(SidFactory::createFromString('test-sid'));
 
-        self::assertEquals('2451071245', (string) $result->get('id'));
+        self::assertEquals('2451071245', $result->get('id'));
     }
 
     /**
@@ -120,17 +120,20 @@ class SkrillClientExecuteOnDemandTest extends TestCase
         $client
             ->expects(self::once())
             ->method('request')
-            ->with('POST', 'https://www.skrill.com/app/ondemand_request.pl', [
-                'form_params' => [
-                    'action' => 'request',
-                    'sid' => $sid,
-                ],
-                'headers' => [
-                    'Accept' => 'text/xml',
-                ],
-            ])
-            ->willReturn($response)
-        ;
+            ->with(
+                'POST',
+                'https://www.skrill.com/app/ondemand_request.pl',
+                [
+                    'form_params' => [
+                        'action' => 'request',
+                        'sid' => $sid,
+                    ],
+                    'headers' => [
+                        'Accept' => 'text/xml',
+                    ],
+                ]
+            )
+            ->willReturn($response);
 
         $client = new SkrillClient($client, new Email($email), new Password($password));
 
@@ -145,29 +148,43 @@ class SkrillClientExecuteOnDemandTest extends TestCase
         parent::setUp();
 
         $this->parser = new DecimalMoneyParser(new ISOCurrencies());
-        $this->successOnDemandMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-                        <response>
-                            <transaction>
-                                <amount>0.50</amount>
-                                <currency>USD</currency>
-                                <id>2451071245</id>
-                                <status>2</status>
-                                <status_msg>processed</status_msg>
-                            </transaction>
-                        </response>'
-            ),
-        ]));
 
-        $this->failOnDemandMockHandler = HandlerStack::create(new MockHandler([
-            new Response(
-                200,
-                [],
-                '<?xml version="1.0" encoding="UTF-8"?><response><error><error_msg>SESSION_EXPIRED</error_msg></error></response>'
-            ),
-        ]));
+        $successBody = <<<'XML'
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response>
+    <transaction>
+        <amount>0.50</amount>
+        <currency>USD</currency>
+        <id>2451071245</id>
+        <status>2</status>
+        <status_msg>processed</status_msg>
+    </transaction>
+</response>
+XML;
+
+        $this->successOnDemandMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(200, [], $successBody),
+                ]
+            )
+        );
+
+        $failBody = <<<'XML'
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+    <error>
+        <error_msg>SESSION_EXPIRED</error_msg>
+    </error>
+</response>
+XML;
+
+        $this->failOnDemandMockHandler = HandlerStack::create(
+            new MockHandler(
+                [
+                    new Response(200, [], $failBody),
+                ]
+            )
+        );
     }
 }

@@ -32,7 +32,13 @@ use Skrill\Exception\SkrillResponseException;
 /**
  * Skrill HTTP client.
  */
-final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemandClientInterface, SkrillSaleClientInterface, SkrillTransferClientInterface, SkrillRefundClientInterface, SkrillPayoutClientInterface
+final class SkrillClient implements
+    SkrillHistoryClientInterface,
+    SkrillOnDemandClientInterface,
+    SkrillSaleClientInterface,
+    SkrillTransferClientInterface,
+    SkrillRefundClientInterface,
+    SkrillPayoutClientInterface
 {
     /**
      * @var ClientInterface
@@ -230,7 +236,10 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
     public function executeOnDemand(Sid $sid): Response
     {
         return ResponseFactory::createFromTransferResponse(
-            $this->request(['action' => 'request', 'sid' => strval($sid)], 'https://www.skrill.com/app/ondemand_request.pl')
+            $this->request(
+                ['action' => 'request', 'sid' => strval($sid)],
+                'https://www.skrill.com/app/ondemand_request.pl'
+            )
         );
     }
 
@@ -253,10 +262,14 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
         }
 
         $tmpFile = new SplFileObject(tempnam(sys_get_temp_dir(), strval(rand())), 'w+');
-        $this->client->request('POST', 'https://www.skrill.com/app/query.pl', [
-            RequestOptions::FORM_PARAMS => $params,
-            RequestOptions::SINK => $tmpFile->getPathname(),
-        ]);
+        $this->client->request(
+            'POST',
+            'https://www.skrill.com/app/query.pl',
+            [
+                RequestOptions::FORM_PARAMS => $params,
+                RequestOptions::SINK => $tmpFile->getPathname(),
+            ]
+        );
 
         if (preg_match('/^[\d]{3}[\t]{2}(.+)$/', $tmpFile->current(), $matches)) {
             throw SkrillResponseException::fromSkillError($matches[1]);
@@ -267,7 +280,22 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
         $tmpFile->setFlags(SplFileObject::READ_CSV | SplFileObject::READ_AHEAD | SplFileObject::SKIP_EMPTY);
 
         foreach (new LimitIterator($tmpFile, 1) as $row) {
-            list(, $time, $type, $details, $lesion, $profit, $status, $balance, $reference, $amount, $currency, $info, $skrillId, $paymentType) = $row;
+            [
+                ,
+                $time,
+                $type,
+                $details,
+                $lesion,
+                $profit,
+                $status,
+                $balance,
+                $reference,
+                $amount,
+                $currency,
+                $info,
+                $skrillId,
+                $paymentType,
+            ] = $row;
             $datetime = DateTimeImmutable::createFromFormat('d M y H:i', $time);
 
             if (!$datetime instanceof DateTimeImmutable) {
@@ -275,7 +303,21 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
             }
 
             $result->append(
-                new HistoryItem($reference, $skrillId, $datetime, $type, $details, $lesion, $profit, $status, $balance, $amount, $currency, $info, $paymentType)
+                new HistoryItem(
+                    $reference,
+                    $skrillId,
+                    $datetime,
+                    $type,
+                    $details,
+                    $lesion,
+                    $profit,
+                    $status,
+                    $balance,
+                    $amount,
+                    $currency,
+                    $info,
+                    $paymentType
+                )
             );
         }
 
@@ -294,11 +336,15 @@ final class SkrillClient implements SkrillHistoryClientInterface, SkrillOnDemand
      */
     private function request(array $parameters, string $url): ResponseInterface
     {
-        return $this->client->request('POST', $url, [
-            RequestOptions::FORM_PARAMS => $parameters,
-            RequestOptions::HEADERS => [
-                'Accept' => 'text/xml',
-            ],
-        ]);
+        return $this->client->request(
+            'POST',
+            $url,
+            [
+                RequestOptions::FORM_PARAMS => $parameters,
+                RequestOptions::HEADERS => [
+                    'Accept' => 'text/xml',
+                ],
+            ]
+        );
     }
 }
