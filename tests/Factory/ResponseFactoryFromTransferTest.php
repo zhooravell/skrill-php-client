@@ -94,7 +94,7 @@ class ResponseFactoryFromTransferTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->response = $this->createMock(ResponseInterface::class);
         $this->responseBody = $this->createMock(StreamInterface::class);
