@@ -49,8 +49,8 @@ class LanguageTest extends TestCase
      */
     public function testInvalidValue()
     {
-        self::expectException(InvalidLangException::class);
-        self::expectExceptionMessage('Not accepted language by Skrill.');
+        $this->expectException(InvalidLangException::class);
+        $this->expectExceptionMessage('Not accepted language by Skrill.');
 
         new Language('test');
     }

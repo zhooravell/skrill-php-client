@@ -22,7 +22,7 @@ class ResponseTest extends TestCase
     {
         $method = new ReflectionClass(Response::class);
 
-        $this->assertTrue($method->isFinal());
+        self::assertTrue($method->isFinal());
     }
 
     /**
@@ -35,7 +35,7 @@ class ResponseTest extends TestCase
      */
     public function testDotNotation($key, $expected, array $data, $default = null)
     {
-        $this->assertEquals($expected, (new Response($data))->get($key, $default));
+        self::assertEquals($expected, (new Response($data))->get($key, $default));
     }
 
     /**
@@ -154,8 +154,8 @@ class ResponseTest extends TestCase
     {
         $response = new Response(['userId' => 111]);
 
-        $this->assertTrue(isset($response->userId));
-        $this->assertFalse(isset($response->address));
+        self::assertTrue(isset($response->userId));
+        self::assertFalse(isset($response->address));
     }
 
     public function testGetPropertyValue()
@@ -163,7 +163,7 @@ class ResponseTest extends TestCase
         $userId = 111;
         $response = new Response(['userId' => $userId]);
 
-        $this->assertEquals($userId, $response->userId);
+        self::assertEquals($userId, $response->userId);
     }
 
     public function testGetNotExistsPropertyValue()
@@ -171,7 +171,7 @@ class ResponseTest extends TestCase
         $userId = 111;
         $response = new Response(['userId' => $userId]);
 
-        $this->assertNull($response->address);
+        self::assertNull($response->address);
     }
 
     public function testGetValuesMixedApproach()
@@ -185,10 +185,10 @@ class ResponseTest extends TestCase
             ],
         ]);
 
-        $this->assertNull($response->get('address.street_2'));
-        $this->assertEquals($street, $response->get('address.street'));
-        $this->assertEquals($userId, $response->userId);
-        $this->assertEquals($userId, $response->get('userId'));
-        $this->assertEquals(['street' => $street], $response->address);
+        self::assertNull($response->get('address.street_2'));
+        self::assertEquals($street, $response->get('address.street'));
+        self::assertEquals($userId, $response->userId);
+        self::assertEquals($userId, $response->get('userId'));
+        self::assertEquals(['street' => $street], $response->address);
     }
 }

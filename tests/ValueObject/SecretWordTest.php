@@ -36,8 +36,8 @@ class SecretWordTest extends StringValueObjectTestCase
      */
     public function testInvalidMaxLength()
     {
-        self::expectException(InvalidSecretWordException::class);
-        self::expectExceptionMessage('The length of Skrill secret word should not exceed 10 characters.');
+        $this->expectException(InvalidSecretWordException::class);
+        $this->expectExceptionMessage('The length of Skrill secret word should not exceed 10 characters.');
 
         new SecretWord(str_repeat('a', 35));
     }
@@ -51,8 +51,8 @@ class SecretWordTest extends StringValueObjectTestCase
      */
     public function testEmptyValue(string $value)
     {
-        self::expectException(InvalidSecretWordException::class);
-        self::expectExceptionMessage('Skrill secret word should not be blank.');
+        $this->expectException(InvalidSecretWordException::class);
+        $this->expectExceptionMessage('Skrill secret word should not be blank.');
 
         new SecretWord($value);
     }
@@ -66,8 +66,8 @@ class SecretWordTest extends StringValueObjectTestCase
      */
     public function testSpecialCharacters($value)
     {
-        self::expectException(InvalidSecretWordException::class);
-        self::expectExceptionMessage('Special characters are not permitted in Skrill secret word.');
+        $this->expectException(InvalidSecretWordException::class);
+        $this->expectExceptionMessage('Special characters are not permitted in Skrill secret word.');
 
         new SecretWord($value);
     }

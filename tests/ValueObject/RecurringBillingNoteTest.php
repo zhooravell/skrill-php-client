@@ -39,8 +39,8 @@ class RecurringBillingNoteTest extends StringValueObjectTestCase
      */
     public function testEmptyValue(string $value)
     {
-        self::expectException(InvalidRecurringBillingNoteException::class);
-        self::expectExceptionMessage('Skrill recurring billing note should not be blank.');
+        $this->expectException(InvalidRecurringBillingNoteException::class);
+        $this->expectExceptionMessage('Skrill recurring billing note should not be blank.');
 
         new RecurringBillingNote($value);
     }

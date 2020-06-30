@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Skrill\Tests\ValueObject;
 
-use PHPUnit\Framework\TestCase;
 use Skrill\ValueObject\RecurringPaymentID;
 use Skrill\Exception\InvalidRecurringPaymentIDException;
 
@@ -40,8 +39,8 @@ class RecurringPaymentIdTest extends StringValueObjectTestCase
      */
     public function testEmptyValue(string $value)
     {
-        self::expectException(InvalidRecurringPaymentIDException::class);
-        self::expectExceptionMessage('Skrill recurring payment ID should not be blank.');
+        $this->expectException(InvalidRecurringPaymentIDException::class);
+        $this->expectExceptionMessage('Skrill recurring payment ID should not be blank.');
 
         new RecurringPaymentID($value);
     }

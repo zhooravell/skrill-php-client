@@ -39,8 +39,8 @@ class TransactionIDTest extends StringValueObjectTestCase
      */
     public function testEmptyValue(string $value)
     {
-        self::expectException(InvalidTransactionIDException::class);
-        self::expectExceptionMessage('Skrill transaction ID should not be blank.');
+        $this->expectException(InvalidTransactionIDException::class);
+        $this->expectExceptionMessage('Skrill transaction ID should not be blank.');
 
         new TransactionID($value);
     }

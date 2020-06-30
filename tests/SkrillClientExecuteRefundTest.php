@@ -71,7 +71,7 @@ class SkrillClientExecuteRefundTest extends TestCase
      */
     public function testExecuteRefundFail()
     {
-        self::expectException(SkrillResponseException::class);
+        $this->expectException(SkrillResponseException::class);
 
         $client = new Client(['handler' => $this->failRefundMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
@@ -93,7 +93,7 @@ class SkrillClientExecuteRefundTest extends TestCase
         $sid = 'sid';
 
         /** @var ClientInterface $client */
-        $client = self::createMock(ClientInterface::class);
+        $client = $this->createMock(ClientInterface::class);
 
         $response = $this->createMock(ResponseInterface::class);
         $responseBody = $this->createMock(StreamInterface::class);

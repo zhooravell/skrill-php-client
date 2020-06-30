@@ -36,8 +36,8 @@ class EmailTest extends TestCase
      */
     public function testInvalidValue()
     {
-        self::expectException(InvalidEmailException::class);
-        self::expectExceptionMessage('Email is not a valid email address.');
+        $this->expectException(InvalidEmailException::class);
+        $this->expectExceptionMessage('Email is not a valid email address.');
 
         new Email('test');
     }

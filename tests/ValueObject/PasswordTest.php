@@ -35,8 +35,8 @@ class PasswordTest extends StringValueObjectTestCase
      */
     public function testInvalidMinLength()
     {
-        self::expectException(InvalidPasswordException::class);
-        self::expectExceptionMessage('Skrill API/MQI password is too short. It should have 8 characters or more.');
+        $this->expectException(InvalidPasswordException::class);
+        $this->expectExceptionMessage('Skrill API/MQI password is too short. It should have 8 characters or more.');
 
         new Password('a123');
     }
@@ -50,8 +50,8 @@ class PasswordTest extends StringValueObjectTestCase
      */
     public function testEmpty(string $value)
     {
-        self::expectException(InvalidPasswordException::class);
-        self::expectExceptionMessage('Skrill API/MQI password is too short. It should have 8 characters or more.');
+        $this->expectException(InvalidPasswordException::class);
+        $this->expectExceptionMessage('Skrill API/MQI password is too short. It should have 8 characters or more.');
 
         new Password($value);
     }
@@ -61,8 +61,8 @@ class PasswordTest extends StringValueObjectTestCase
      */
     public function testMissingLetters()
     {
-        self::expectException(InvalidPasswordException::class);
-        self::expectExceptionMessage('Skrill API/MQI password must include at least one letter.');
+        $this->expectException(InvalidPasswordException::class);
+        $this->expectExceptionMessage('Skrill API/MQI password must include at least one letter.');
 
         new Password('12345678');
     }
@@ -72,8 +72,8 @@ class PasswordTest extends StringValueObjectTestCase
      */
     public function testMissingNumbers()
     {
-        self::expectException(InvalidPasswordException::class);
-        self::expectExceptionMessage('Skrill API/MQI password must include at least one number.');
+        $this->expectException(InvalidPasswordException::class);
+        $this->expectExceptionMessage('Skrill API/MQI password must include at least one number.');
 
         new Password('qwertyui');
     }
