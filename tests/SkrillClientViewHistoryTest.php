@@ -83,7 +83,7 @@ class SkrillClientViewHistoryTest extends TestCase
      */
     public function testViewHistoryFail()
     {
-        self::expectException(SkrillResponseException::class);
+        $this->expectException(SkrillResponseException::class);
         $this->expectExceptionMessage('Skrill error: Illegal parameter value: 02-08-201');
 
         $client = new Client(['handler' => $this->failHistoryMockHandler]);
@@ -100,7 +100,7 @@ class SkrillClientViewHistoryTest extends TestCase
      */
     public function testViewHistoryInvalidTime()
     {
-        self::expectException(SkrillResponseException::class);
+        $this->expectException(SkrillResponseException::class);
         $this->expectExceptionMessage('Skrill error: Invalid time "TEST".');
 
         $client = new Client(['handler' => $this->invalidTimeHistoryMockHandler]);

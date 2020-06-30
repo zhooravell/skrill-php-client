@@ -50,8 +50,8 @@ class CompanyNameTest extends TestCase
      */
     public function testInvalidMaxLength()
     {
-        self::expectException(InvalidCompanyNameException::class);
-        self::expectExceptionMessage('The length of company name should not exceed 30 characters.');
+        $this->expectException(InvalidCompanyNameException::class);
+        $this->expectExceptionMessage('The length of company name should not exceed 30 characters.');
 
         new CompanyName(str_repeat('a', 35));
     }

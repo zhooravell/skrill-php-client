@@ -21,8 +21,8 @@ class UrlTest extends StringValueObjectTestCase
      */
     public function testEmpty(string $value)
     {
-        self::expectException(InvalidUrlException::class);
-        self::expectExceptionMessage('"" is not a valid url.');
+        $this->expectException(InvalidUrlException::class);
+        $this->expectExceptionMessage('"" is not a valid url.');
 
         new Url($value);
     }
@@ -50,8 +50,8 @@ class UrlTest extends StringValueObjectTestCase
      */
     public function testInvalidUrl()
     {
-        self::expectException(InvalidUrlException::class);
-        self::expectExceptionMessage('"localhost" is not a valid url.');
+        $this->expectException(InvalidUrlException::class);
+        $this->expectExceptionMessage('"localhost" is not a valid url.');
 
         new Url('localhost');
     }

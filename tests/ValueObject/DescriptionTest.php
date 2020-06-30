@@ -34,8 +34,8 @@ class DescriptionTest extends StringValueObjectTestCase
      */
     public function testEmptyText(string $value)
     {
-        self::expectException(InvalidDescriptionException::class);
-        self::expectExceptionMessage('Description text should not be blank.');
+        $this->expectException(InvalidDescriptionException::class);
+        $this->expectExceptionMessage('Description text should not be blank.');
 
         new Description('Product ID:', $value);
     }
@@ -49,8 +49,8 @@ class DescriptionTest extends StringValueObjectTestCase
      */
     public function testEmptyDescription(string $value)
     {
-        self::expectException(InvalidDescriptionException::class);
-        self::expectExceptionMessage('Description subject should not be blank.');
+        $this->expectException(InvalidDescriptionException::class);
+        $this->expectExceptionMessage('Description subject should not be blank.');
 
         new Description($value, '4509334');
     }

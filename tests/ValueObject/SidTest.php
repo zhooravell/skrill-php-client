@@ -35,8 +35,8 @@ class SidTest extends StringValueObjectTestCase
      */
     public function testEmptyValue(string $value)
     {
-        self::expectException(InvalidSidException::class);
-        self::expectExceptionMessage('Skrill sid should not be blank.');
+        $this->expectException(InvalidSidException::class);
+        $this->expectExceptionMessage('Skrill sid should not be blank.');
 
         new Sid($value, new DateTimeImmutable());
     }

@@ -81,7 +81,7 @@ class SkrillClientPrepareTransferTest extends TestCase
      */
     public function testPrepareTransferFail()
     {
-        self::expectException(SkrillResponseException::class);
+        $this->expectException(SkrillResponseException::class);
 
         $client = new Client(['handler' => $this->failTransferMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
@@ -113,7 +113,7 @@ class SkrillClientPrepareTransferTest extends TestCase
         $note = 'Note';
 
         /** @var ClientInterface|MockObject $client */
-        $client = self::createMock(ClientInterface::class);
+        $client = $this->createMock(ClientInterface::class);
 
         $response = $this->createMock(ResponseInterface::class);
         $responseBody = $this->createMock(StreamInterface::class);

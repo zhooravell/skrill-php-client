@@ -39,7 +39,7 @@ class ResponseFactoryFromRefundTest extends TestCase
         self::assertEquals('USD', $response->get('mb_currency'));
         self::assertEquals('e40a8e22-016e-4687-870c-f073631e3131', $response->get('transaction_id'));
         self::assertEquals(2, $response->get('status'));
-        self::assertEquals(null, $response->get('error'));
+        self::assertNull($response->get('error'));
     }
 
     /**

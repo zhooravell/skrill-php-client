@@ -13,8 +13,8 @@ class HelpersTest extends TestCase
 {
     public function testResourcesFilesExists()
     {
-        self::assertTrue(file_exists(__DIR__ . '/../resources/iso-3166-1-alpha-3-countries-skill-supports.php'));
-        self::assertTrue(file_exists(__DIR__ . '/../resources/iso-6391-languages-skrill-supports.php'));
+        self::assertFileExists(__DIR__ . '/../resources/iso-3166-1-alpha-3-countries-skill-supports.php');
+        self::assertFileExists(__DIR__ . '/../resources/iso-6391-languages-skrill-supports.php');
     }
 
     public function testGetSkillSupportsCountries()
@@ -23,10 +23,12 @@ class HelpersTest extends TestCase
 
         $countries = getSkillSupportsCountries();
 
-        self::assertTrue(is_array($countries));
+        self::assertIsArray($countries);
         self::assertCount(238, $countries);
 
-        foreach ($countries as $country => $title) {
+        $countryLists = array_keys($countries);
+
+        foreach ($countryLists as $country) {
             self::assertEquals(3, mb_strlen($country));
         }
 
@@ -49,10 +51,12 @@ class HelpersTest extends TestCase
 
         $languages = getSkillSupportsLanguages();
 
-        self::assertTrue(is_array($languages));
+        self::assertIsArray($languages);
         self::assertCount(18, $languages);
 
-        foreach ($languages as $language => $title) {
+        $languageLists = array_keys($languages);
+
+        foreach ($languageLists as $language) {
             self::assertEquals(2, mb_strlen($language));
         }
     }

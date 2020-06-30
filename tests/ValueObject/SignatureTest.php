@@ -34,8 +34,8 @@ class SignatureTest extends StringValueObjectTestCase
      */
     public function testEmptyValue(string $value)
     {
-        self::expectException(InvalidSignatureException::class);
-        self::expectExceptionMessage('Signature should not be blank.');
+        $this->expectException(InvalidSignatureException::class);
+        $this->expectExceptionMessage('Signature should not be blank.');
 
         new Signature($value);
     }
@@ -45,8 +45,8 @@ class SignatureTest extends StringValueObjectTestCase
      */
     public function testLowercase()
     {
-        self::expectException(InvalidSignatureException::class);
-        self::expectExceptionMessage('Signature should in uppercase.');
+        $this->expectException(InvalidSignatureException::class);
+        $this->expectExceptionMessage('Signature should in uppercase.');
 
         new Signature(md5('test123'));
     }

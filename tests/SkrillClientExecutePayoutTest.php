@@ -82,7 +82,7 @@ class SkrillClientExecutePayoutTest extends TestCase
      */
     public function testExecutePayoutFail()
     {
-        self::expectException(SkrillResponseException::class);
+        $this->expectException(SkrillResponseException::class);
 
         $client = new Client(['handler' => $this->failPayoutMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));

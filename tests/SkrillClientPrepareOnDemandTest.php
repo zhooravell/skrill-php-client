@@ -85,7 +85,7 @@ class SkrillClientPrepareOnDemandTest extends TestCase
      */
     public function testPrepareOnDemandFail()
     {
-        self::expectException(SkrillResponseException::class);
+        $this->expectException(SkrillResponseException::class);
 
         $client = new Client(['handler' => $this->failOnDemandMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
@@ -117,7 +117,7 @@ class SkrillClientPrepareOnDemandTest extends TestCase
         $transactionId = 222;
 
         /** @var ClientInterface|MockObject $client */
-        $client = self::createMock(ClientInterface::class);
+        $client = $this->createMock(ClientInterface::class);
 
         $response = $this->createMock(ResponseInterface::class);
         $responseBody = $this->createMock(StreamInterface::class);
