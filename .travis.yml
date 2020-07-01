@@ -10,6 +10,7 @@ before_script:
   - travis_retry composer install --no-interaction --prefer-source
 
 script:
+  - vendor/bin/phpcs --standard=PSR2 src tests
   - vendor/bin/phpunit --coverage-clover=coverage.xml
   - vendor/bin/infection -s --threads=4
 
