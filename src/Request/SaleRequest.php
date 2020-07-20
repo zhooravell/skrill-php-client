@@ -17,17 +17,15 @@ use Skrill\Request\Traits\AmountFormatterTrait;
 /**
  * Class SaleRequest.
  */
-final class SaleRequest
-{
+final class SaleRequest {
     use GetPayloadTrait;
     use AmountFormatterTrait;
 
     /**
      * @param TransactionID $transactionId
-     * @param Money         $amount
+     * @param Money $amount
      */
-    public function __construct(TransactionID $transactionId, Money $amount)
-    {
+    public function __construct(TransactionID $transactionId, Money $amount) {
         $this->payload = [
             'transaction_id' => strval($transactionId),
             'currency' => strval($amount->getCurrency()),
@@ -40,8 +38,7 @@ final class SaleRequest
      *
      * @return SaleRequest
      */
-    public function setLang(Language $lang): self
-    {
+    public function setLang(Language $lang): self {
         $this->payload['language'] = strval($lang);
 
         return $this;
@@ -52,9 +49,30 @@ final class SaleRequest
      *
      * @return SaleRequest
      */
-    public function setPayFromEmail(Email $email): self
-    {
+    public function setPayFromEmail(Email $email): self {
         $this->payload['pay_from_email'] = strval($email);
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $first_name
+     * @return SaleRequest
+     */
+    public function setFirstName(string $first_name): self {
+        $this->payload['first_name'] = $first_name;
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $last_name
+     * @return SaleRequest
+     */
+    public function setLastName(string $last_name): self {
+        $this->payload['last_name'] = $last_name;
 
         return $this;
     }
@@ -73,8 +91,7 @@ final class SaleRequest
      *
      * @return SaleRequest
      */
-    public function setProductDescription(Description $productDescription): self
-    {
+    public function setProductDescription(Description $productDescription): self {
         $this->payload['detail1_description'] = $productDescription->getSubject();
         $this->payload['detail1_text'] = $productDescription->getText();
 
@@ -86,8 +103,7 @@ final class SaleRequest
      *
      * @return $this
      */
-    public function setReturnUrl(Url $url): self
-    {
+    public function setReturnUrl(Url $url): self {
         $this->payload['return_url'] = strval($url);
 
         return $this;
@@ -98,8 +114,7 @@ final class SaleRequest
      *
      * @return $this
      */
-    public function setCancelUrl(Url $url): self
-    {
+    public function setCancelUrl(Url $url): self {
         $this->payload['cancel_url'] = strval($url);
 
         return $this;
@@ -110,8 +125,7 @@ final class SaleRequest
      *
      * @return $this
      */
-    public function setStatusUrl(Url $url): self
-    {
+    public function setStatusUrl(Url $url): self {
         $this->payload['status_url'] = strval($url);
 
         return $this;
@@ -119,12 +133,11 @@ final class SaleRequest
 
     /**
      * @param RecurringBillingNote $note
-     * @param Money                $money
+     * @param Money $money
      *
      * @return $this
      */
-    public function enableRecurringBilling(RecurringBillingNote $note, Money $money): self
-    {
+    public function enableRecurringBilling(RecurringBillingNote $note, Money $money): self {
         $this->payload['ondemand_max_amount'] = $this->formatToFloat($money);
         $this->payload['ondemand_max_currency'] = strval($money->getCurrency());
         $this->payload['ondemand_note'] = strval($note);
