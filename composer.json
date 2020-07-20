@@ -1,5 +1,5 @@
 {
-    "name": "zhooravell/skrill-php-client",
+    "name": "kulatymic/skrill-php-client",
     "description": "Skrill api wrapper.",
     "license": "MIT",
     "type": "library",
