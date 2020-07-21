@@ -33,8 +33,7 @@ $password = new Password('...');
 
 $client = new SkrillClient($httpClient, $email, $password);
 $transactionID = new TransactionID('...');
-$money = new Money(1, new Currency('USD'));
-$request = new SaleRequest($transactionID, $this->parser->parse('10.5', 'EUR'));
+$request = new SaleRequest($transactionID, new Money(1, new Currency('USD')));
 $sid = $client->prepareSale($request);
 $redirectURL = RedirectUrlFactory::fromSid($sid);
 
