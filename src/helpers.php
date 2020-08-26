@@ -21,3 +21,13 @@ if (!function_exists('getSkillSupportsLanguages')) {
         return include __DIR__ . '/../resources/iso-6391-languages-skrill-supports.php';
     }
 }
+
+if (!function_exists('convertISO')) {
+    /**
+     * @return array
+     */
+    function convertISO(): array
+    {
+        return include __DIR__ . '/../resources/convert-iso-alpha-2-to-alpha-3.php';
+    }
+}

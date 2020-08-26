@@ -6,6 +6,9 @@ namespace Skrill;
 
 use ArrayObject;
 use LimitIterator;
+use Skrill\Factory\VerificationServiceFactory;
+use Skrill\Request\CustomerVerificationRequest;
+use Skrill\ValueObject\SecretWord;
 use SplFileObject;
 use DateTimeInterface;
 use Skrill\ValueObject\Sid;
@@ -37,6 +40,7 @@ final class SkrillClient implements
     SkrillSaleClientInterface,
     SkrillTransferClientInterface,
     SkrillRefundClientInterface,
+    SkrillCustomerVerificationClientInterface,
     SkrillPayoutClientInterface
 {
     /**
@@ -79,24 +83,49 @@ final class SkrillClient implements
     private $password;
 
     /**
-     * @param ClientInterface  $client
-     * @param Email            $merchantEmail
-     * @param Password         $password
-     * @param Url|null         $logoUrl
+     * Skrill Secret Word
+     *
+     * @var SecretWord|null
+     */
+    private $secretWord;
+
+    /**
+     * @param ClientInterface $client
+     * @param Email $merchantEmail
+     * @param Password $password
+     * @param Url|null $logoUrl
      * @param CompanyName|null $companyName
+     * @param SecretWord|null $secretWord
      */
     public function __construct(
         ClientInterface $client,
         Email $merchantEmail,
         Password $password,
         Url $logoUrl = null,
-        CompanyName $companyName = null
+        CompanyName $companyName = null,
+        SecretWord $secretWord = null
     ) {
         $this->client = $client;
         $this->companyName = $companyName;
         $this->merchantEmail = $merchantEmail;
         $this->logoUrl = $logoUrl;
-        $this->password = md5(strval($password));
+        $this->password = md5((string)$password);
+        $this->secretWord = $secretWord;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     * @throws GuzzleException
+     */
+    public function executeCustomerVerification(CustomerVerificationRequest $request): Response
+    {
+        $params = $request->getPayload();
+        $params['password'] = $this->secretWord;
+
+        return VerificationServiceFactory::createFromRequestResponse(
+            $this->request(array_filter($params), 'https://api.skrill.com/mqi/customer-verifications', 'json')
+        );
     }
 
     /**
@@ -108,14 +137,14 @@ final class SkrillClient implements
     {
         $params = $request->getPayload();
         $params['prepare_only'] = 1; // Forces only the SID to be returned without the actual page.
-        $params['pay_to_email'] = strval($this->merchantEmail);
+        $params['pay_to_email'] = (string)$this->merchantEmail;
 
         if (null != $this->logoUrl) {
-            $params['logo_url'] = strval($this->logoUrl);
+            $params['logo_url'] = (string)$this->logoUrl;
         }
 
         if (null != $this->companyName) {
-            $params['recipient_description'] = strval($this->companyName);
+            $params['recipient_description'] = (string)$this->companyName;
         }
 
         return SidFactory::createFromSaleResponse(
@@ -132,7 +161,7 @@ final class SkrillClient implements
     {
         $params = $request->getPayload();
         $params['action'] = 'prepare';
-        $params['email'] = strval($this->merchantEmail);
+        $params['email'] = (string)$this->merchantEmail;
         $params['password'] = $this->password;
 
         return SidFactory::createFromXMLResponse(
@@ -149,7 +178,7 @@ final class SkrillClient implements
     {
         $params = $request->getPayload();
         $params['action'] = 'prepare';
-        $params['email'] = strval($this->merchantEmail);
+        $params['email'] = (string)$this->merchantEmail;
         $params['password'] = $this->password;
 
         return SidFactory::createFromXMLResponse(
@@ -166,7 +195,7 @@ final class SkrillClient implements
     {
         $params = $request->getPayload();
         $params['action'] = 'prepare';
-        $params['email'] = strval($this->merchantEmail);
+        $params['email'] = (string)$this->merchantEmail;
         $params['password'] = $this->password;
 
         return SidFactory::createFromXMLResponse(
@@ -182,7 +211,7 @@ final class SkrillClient implements
     public function executeTransfer(Sid $sid): Response
     {
         return ResponseFactory::createFromTransferResponse(
-            $this->request(['action' => 'transfer', 'sid' => strval($sid)], 'https://www.skrill.com/app/pay.pl')
+            $this->request(['action' => 'transfer', 'sid' => (string)$sid], 'https://www.skrill.com/app/pay.pl')
         );
     }
 
@@ -194,7 +223,7 @@ final class SkrillClient implements
     public function executePayout(Sid $sid): Response
     {
         return ResponseFactory::createFromTransferResponse(
-            $this->request(['action' => 'transfer', 'sid' => strval($sid)], 'https://www.skrill.com/app/pay.pl')
+            $this->request(['action' => 'transfer', 'sid' => (string)$sid], 'https://www.skrill.com/app/pay.pl')
         );
     }
 
@@ -206,7 +235,7 @@ final class SkrillClient implements
     public function executeRefund(Sid $sid): Response
     {
         return ResponseFactory::createFromRefundResponse(
-            $this->request(['action' => 'refund', 'sid' => strval($sid)], 'https://www.skrill.com/app/refund.pl')
+            $this->request(['action' => 'refund', 'sid' => (string)$sid], 'https://www.skrill.com/app/refund.pl')
         );
     }
 
@@ -219,7 +248,7 @@ final class SkrillClient implements
     {
         $params = $request->getPayload();
         $params['action'] = 'prepare';
-        $params['email'] = strval($this->merchantEmail);
+        $params['email'] = (string)$this->merchantEmail;
         $params['password'] = $this->password;
 
         return SidFactory::createFromXMLResponse(
@@ -236,7 +265,7 @@ final class SkrillClient implements
     {
         return ResponseFactory::createFromTransferResponse(
             $this->request(
-                ['action' => 'request', 'sid' => strval($sid)],
+                ['action' => 'request', 'sid' => (string)$sid],
                 'https://www.skrill.com/app/ondemand_request.pl'
             )
         );
@@ -250,7 +279,7 @@ final class SkrillClient implements
     public function viewHistory(DateTimeInterface $startDate, DateTimeInterface $endDate = null): ArrayObject
     {
         $params = [
-            'email' => strval($this->merchantEmail),
+            'email' => (string)$this->merchantEmail,
             'password' => $this->password,
             'action' => 'history',
             'start_date' => $startDate->format('d-m-Y'),
@@ -260,7 +289,7 @@ final class SkrillClient implements
             $params['end_date'] = $endDate->format('d-m-y');
         }
 
-        $tmpFile = new SplFileObject(tempnam(sys_get_temp_dir(), strval(rand())), 'w+');
+        $tmpFile = new SplFileObject(tempnam(sys_get_temp_dir(), (string)mt_rand()), 'w+');
         $this->client->request(
             'POST',
             'https://www.skrill.com/app/query.pl',
@@ -288,24 +317,53 @@ final class SkrillClient implements
     }
 
     /**
-     * @param array  $parameters
+     * @param array $parameters
      * @param string $url
-     *
+     * @param string $type
+     * @param string $method
      * @return ResponseInterface
      *
      * @throws GuzzleException
      */
-    private function request(array $parameters, string $url): ResponseInterface
+    private function request(array $parameters, string $url, string $type = 'xml', string $method = 'POST'): ResponseInterface
     {
-        return $this->client->request(
-            'POST',
-            $url,
-            [
-                RequestOptions::FORM_PARAMS => $parameters,
-                RequestOptions::HEADERS => [
-                    'Accept' => 'text/xml',
-                ],
-            ]
-        );
+        return $this->client->request($method, $url, $this->setHeaders($type, $parameters));
+    }
+
+    /**
+     * @param string $type
+     * @param array $parameters
+     * @return array
+     */
+    private function setHeaders(string $type, array $parameters): array
+    {
+        if (method_exists( $this, "{$type}Headers")) {
+            return $this->{"{$type}Headers"}($parameters);
+        }
+        return [];
+    }
+
+    /**
+     * @param array $parameters
+     * @return array
+     */
+    private function xmlHeaders(array $parameters): array
+    {
+        return [
+            RequestOptions::FORM_PARAMS => $parameters,
+            RequestOptions::HEADERS => ['Accept' => 'text/xml']
+        ];
+    }
+
+    /**
+     * @param array $parameters
+     * @return array
+     */
+    private function jsonHeaders(array $parameters): array
+    {
+        return [
+            RequestOptions::JSON => $parameters,
+            RequestOptions::HEADERS => ['Accept' => 'application/json']
+        ];
     }
 }
