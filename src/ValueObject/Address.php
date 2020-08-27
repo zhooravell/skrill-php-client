@@ -62,7 +62,7 @@ final class Address
         }
 
         $address = trim($address);
-        if (!empty($address = $this->validateAddress($address))) {
+        if (!empty($address) && $this->validateAddress($address)) {
             // Non‐alphanumeric characters such as spaces and commas are not supported and will return NO_MATCH
             preg_match('/\S+(?<!\W)/', trim($address), $match);
             $this->houseNumber = $match[0];
