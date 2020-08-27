@@ -57,12 +57,12 @@ final class Address
         }
 
         $country = trim($country);
-        if (!empty($country) && ($country = $this->validateCountry($country))) {
+        if (!empty($country = $this->validateCountry($country))) {
             $this->country = $country;
         }
 
         $address = trim($address);
-        if (!empty($address) && $this->validateAddress($address)) {
+        if (!empty($address = $this->validateAddress($address))) {
             // Non‐alphanumeric characters such as spaces and commas are not supported and will return NO_MATCH
             preg_match('/\S+(?<!\W)/', trim($address), $match);
             $this->houseNumber = $match[0];
@@ -115,6 +115,7 @@ final class Address
      */
     private function validateCountry($value)
     {
+        $countries = [];
         if (mb_strlen($value) == self::ISO_ALPHA_3) {
             $countries = getSkillSupportsCountries();
             if (array_key_exists($value, $countries)) {
@@ -129,7 +130,7 @@ final class Address
             }
         }
 
-        if ($country = array_search($value, $countries)) {
+        if (!empty($country = array_search($value, $countries))) {
             return $country;
         }
 
