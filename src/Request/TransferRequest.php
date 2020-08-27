@@ -27,8 +27,8 @@ final class TransferRequest
     public function __construct(Email $recipientEmail, Money $amount, Description $description)
     {
         $this->payload = [
-            'bnf_email' => strval($recipientEmail),
-            'currency' => strval($amount->getCurrency()),
+            'bnf_email' => (string)$recipientEmail,
+            'currency' => (string)$amount->getCurrency(),
             'amount' => $this->formatToFloat($amount),
             'subject' => $description->getSubject(),
             'note' => $description->getText(),
@@ -44,7 +44,7 @@ final class TransferRequest
      */
     public function setReferenceTransaction(TransactionID $transactionId): self
     {
-        $this->payload['frn_trn_id'] = strval($transactionId);
+        $this->payload['frn_trn_id'] = (string)$transactionId;
 
         return $this;
     }

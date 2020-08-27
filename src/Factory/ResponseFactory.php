@@ -44,7 +44,8 @@ final class ResponseFactory
     {
         $xml = self::responseToXML($response);
 
-        if (!$xml->xpath('transaction_id') ||
+        if (
+            !$xml->xpath('transaction_id') ||
             !$xml->xpath('mb_amount') ||
             !$xml->xpath('mb_currency') ||
             !$xml->xpath('status')

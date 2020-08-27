@@ -50,7 +50,7 @@ final class SHA2SignatureCalculator implements SignatureCalculator
         return new Signature(strtoupper(hash('sha256', implode([
             $this->merchantId->getValue(),
             $transactionId,
-            strtoupper(hash('sha256', strval($this->secretWord))),
+            strtoupper(hash('sha256', (string)$this->secretWord)),
             $this->moneyFormatter->format($amount),
             $amount->getCurrency(),
             $status,

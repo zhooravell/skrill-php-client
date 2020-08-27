@@ -24,7 +24,7 @@ final class TransactionID
      */
     public function __construct($value)
     {
-        $value = trim(strval($value));
+        $value = trim((string)$value);
 
         if (empty($value)) {
             throw InvalidTransactionIDException::emptyTransactionID();

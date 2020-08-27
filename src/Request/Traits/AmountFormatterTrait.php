@@ -20,6 +20,6 @@ trait AmountFormatterTrait
     {
         $formatter = new DecimalMoneyFormatter(new ISOCurrencies());
 
-        return floatval($formatter->format($money));
+        return (float)$formatter->format($money);
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Skrill\Request;
 
 use Money\Money;
-use Skrill\ValueObject\Email;
 use Skrill\ValueObject\Description;
 use Skrill\ValueObject\TransactionID;
 use Skrill\Request\Traits\GetPayloadTrait;
@@ -26,7 +25,7 @@ final class PayoutRequest
     public function __construct(Money $amount, Description $description)
     {
         $this->payload = [
-            'currency' => strval($amount->getCurrency()),
+            'currency' => (string)$amount->getCurrency(),
             'amount' => $this->formatToFloat($amount),
             'subject' => $description->getSubject(),
             'note' => $description->getText(),
@@ -42,7 +41,7 @@ final class PayoutRequest
      */
     public function setReferenceTransaction(TransactionID $transactionId): self
     {
-        $this->payload['frn_trn_id'] = strval($transactionId);
+        $this->payload['frn_trn_id'] = (string)$transactionId;
 
         return $this;
     }
@@ -55,7 +54,7 @@ final class PayoutRequest
      */
     public function setOriginalTransactionId(TransactionID $transactionId): self
     {
-        $this->payload['transaction_id'] = strval($transactionId);
+        $this->payload['transaction_id'] = (string)$transactionId;
 
         return $this;
     }
@@ -71,7 +70,7 @@ final class PayoutRequest
      */
     public function setSkrillOriginalTransactionId(TransactionID $transactionId): self
     {
-        $this->payload['mb_transaction_id'] = strval($transactionId);
+        $this->payload['mb_transaction_id'] = (string)$transactionId;
 
         return $this;
     }

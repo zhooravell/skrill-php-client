@@ -29,8 +29,8 @@ final class SaleRequest
     public function __construct(TransactionID $transactionId, Money $amount)
     {
         $this->payload = [
-            'transaction_id' => strval($transactionId),
-            'currency' => strval($amount->getCurrency()),
+            'transaction_id' => (string)$transactionId,
+            'currency' => (string)$amount->getCurrency(),
             'amount' => $this->formatToFloat($amount),
         ];
     }
@@ -42,7 +42,7 @@ final class SaleRequest
      */
     public function setLang(Language $lang): self
     {
-        $this->payload['language'] = strval($lang);
+        $this->payload['language'] = (string)$lang;
 
         return $this;
     }
@@ -54,7 +54,7 @@ final class SaleRequest
      */
     public function setPayFromEmail(Email $email): self
     {
-        $this->payload['pay_from_email'] = strval($email);
+        $this->payload['pay_from_email'] = (string)$email;
 
         return $this;
     }
@@ -88,7 +88,7 @@ final class SaleRequest
      */
     public function setReturnUrl(Url $url): self
     {
-        $this->payload['return_url'] = strval($url);
+        $this->payload['return_url'] = (string)$url;
 
         return $this;
     }
@@ -100,7 +100,7 @@ final class SaleRequest
      */
     public function setCancelUrl(Url $url): self
     {
-        $this->payload['cancel_url'] = strval($url);
+        $this->payload['cancel_url'] = (string)$url;
 
         return $this;
     }
@@ -112,7 +112,7 @@ final class SaleRequest
      */
     public function setStatusUrl(Url $url): self
     {
-        $this->payload['status_url'] = strval($url);
+        $this->payload['status_url'] = (string)$url;
 
         return $this;
     }
@@ -126,8 +126,8 @@ final class SaleRequest
     public function enableRecurringBilling(RecurringBillingNote $note, Money $money): self
     {
         $this->payload['ondemand_max_amount'] = $this->formatToFloat($money);
-        $this->payload['ondemand_max_currency'] = strval($money->getCurrency());
-        $this->payload['ondemand_note'] = strval($note);
+        $this->payload['ondemand_max_currency'] = (string)$money->getCurrency();
+        $this->payload['ondemand_note'] = (string)$note;
 
         return $this;
     }
