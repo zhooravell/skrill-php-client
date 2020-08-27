@@ -37,7 +37,10 @@ class SecretWordTest extends StringValueObjectTestCase
     public function testInvalidMaxLength()
     {
         $this->expectException(InvalidSecretWordException::class);
-        $this->expectExceptionMessage(sprintf('The length of Skrill Secret Word is too short. It should have %d characters or more.', SecretWord::MIN_LENGTH));
+        $this->expectExceptionMessage(sprintf(
+            'The length of Skrill Secret Word is too short. It should have %d characters or more.',
+            SecretWord::MIN_LENGTH
+        ));
 
         new SecretWord(str_repeat('a', 5));
     }
