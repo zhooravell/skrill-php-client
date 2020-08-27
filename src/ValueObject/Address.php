@@ -111,7 +111,7 @@ final class Address
     /**
      * Customer’s country
      * @param  string $value
-     * @return string|bool
+     * @return string|null
      */
     private function validateCountry($value)
     {
@@ -134,7 +134,7 @@ final class Address
             return $country;
         }
 
-        return false;
+        return null;
     }
 
     /**
