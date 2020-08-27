@@ -18,7 +18,7 @@ class SecretWordTest extends StringValueObjectTestCase
      */
     public function testSuccess()
     {
-        $value = 'test123';
+        $value = 'sw_wefghjylpg';
 
         self::assertEquals($value, new SecretWord($value));
     }
@@ -28,7 +28,7 @@ class SecretWordTest extends StringValueObjectTestCase
      */
     public function testSuccess2()
     {
-        self::assertEquals('test123', new SecretWord(' test123 '));
+        self::assertEquals('sw_wefghjylpg', new SecretWord(' sw_wefghjylpg '));
     }
 
     /**
@@ -37,9 +37,9 @@ class SecretWordTest extends StringValueObjectTestCase
     public function testInvalidMaxLength()
     {
         $this->expectException(InvalidSecretWordException::class);
-        $this->expectExceptionMessage('The length of Skrill secret word should not exceed 10 characters.');
+        $this->expectExceptionMessage(sprintf('The length of Skrill Secret Word is too short. It should have %d characters or more.', SecretWord::MIN_LENGTH));
 
-        new SecretWord(str_repeat('a', 35));
+        new SecretWord(str_repeat('a', 5));
     }
 
     /**
@@ -67,7 +67,7 @@ class SecretWordTest extends StringValueObjectTestCase
     public function testSpecialCharacters($value)
     {
         $this->expectException(InvalidSecretWordException::class);
-        $this->expectExceptionMessage('Special characters are not permitted in Skrill secret word.');
+        $this->expectExceptionMessage('Skrill Secret Word must include at least one non-alphabetic character.');
 
         new SecretWord($value);
     }
@@ -77,8 +77,6 @@ class SecretWordTest extends StringValueObjectTestCase
      */
     public function specialCharactersValueProvider(): Generator
     {
-        yield ['test@'];
-        yield ['$test'];
-        yield ['t%st'];
+        yield ['qwertyuio'];
     }
 }
