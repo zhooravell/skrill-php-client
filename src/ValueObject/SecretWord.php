@@ -16,7 +16,7 @@ final class SecretWord
 {
     use ValueToStringTrait;
 
-    public const MAX_LENGTH = 10;
+    public const MIN_LENGTH = 8;
 
     /**
      * @param string $value
@@ -31,12 +31,16 @@ final class SecretWord
             throw InvalidSecretWordException::emptySecretWord();
         }
 
-        if (strlen($value) > self::MAX_LENGTH) {
-            throw InvalidSecretWordException::invalidMaxLength();
+        if (strlen($value) < self::MIN_LENGTH) {
+            throw InvalidSecretWordException::invalidMinLength();
         }
 
-        if (preg_match('/[^a-zA-Z0-9\s]/', $value)) {
-            throw InvalidSecretWordException::specialCharacters();
+        if (!preg_match('/\pL/u', $value)) {
+            throw InvalidSecretWordException::missingLetters();
+        }
+
+        if (!preg_match('/[^a-z]/ui', $value)) {
+            throw InvalidSecretWordException::missingNonAlphabetic();
         }
 
         $this->value = $value;
