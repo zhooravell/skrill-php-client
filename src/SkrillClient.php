@@ -330,8 +330,7 @@ final class SkrillClient implements
         string $url,
         string $type = 'xml',
         string $method = 'POST'
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         return $this->client->request($method, $url, $this->setHeaders($type, $parameters));
     }
 

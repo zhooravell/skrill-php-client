@@ -25,8 +25,10 @@ final class InvalidSecretWordException extends Exception implements SkrillExcept
      */
     public static function invalidMinLength(): self
     {
-        return new self(sprintf('The length of Skrill Secret Word is too short. It should have %d characters or more.',
-            SecretWord::MIN_LENGTH));
+        return new self(sprintf(
+            'The length of Skrill Secret Word is too short. It should have %d characters or more.',
+            SecretWord::MIN_LENGTH
+        ));
     }
 
     /**
