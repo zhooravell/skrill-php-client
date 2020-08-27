@@ -28,8 +28,14 @@ final class CustomerVerificationRequest
      * @param MerchantID $merchantId
      * @param CustomerId|null $customerId
      */
-    public function __construct(Email $email, Customer $customer, DateOfBirth $dateOfBirth, Address $address,
-        MerchantID $merchantId, CustomerId $customerId = null)
+    public function __construct(
+        Email $email,
+        Customer $customer,
+        DateOfBirth $dateOfBirth,
+        Address $address,
+        MerchantID $merchantId,
+        CustomerId $customerId = null
+    )
     {
         $this->payload = [
             'email' => (string)$email,
