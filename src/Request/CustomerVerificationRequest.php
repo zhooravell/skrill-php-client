@@ -35,8 +35,7 @@ final class CustomerVerificationRequest
         Address $address,
         MerchantID $merchantId,
         CustomerId $customerId = null
-    )
-    {
+    ) {
         $this->payload = [
             'email' => (string)$email,
             'firstName' => $customer->getFirstName(),

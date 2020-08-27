@@ -325,7 +325,12 @@ final class SkrillClient implements
      *
      * @throws GuzzleException
      */
-    private function request(array $parameters, string $url, string $type = 'xml', string $method = 'POST'): ResponseInterface
+    private function request(
+        array $parameters,
+        string $url,
+        string $type = 'xml',
+        string $method = 'POST'
+    ): ResponseInterface
     {
         return $this->client->request($method, $url, $this->setHeaders($type, $parameters));
     }
@@ -337,7 +342,7 @@ final class SkrillClient implements
      */
     private function setHeaders(string $type, array $parameters): array
     {
-        if (method_exists( $this, "{$type}Headers")) {
+        if (method_exists($this, "{$type}Headers")) {
             return $this->{"{$type}Headers"}($parameters);
         }
         return [];
