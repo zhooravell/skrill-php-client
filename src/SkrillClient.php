@@ -123,7 +123,7 @@ final class SkrillClient implements
         $params = $request->getPayload();
         $params['password'] = $this->secretWord;
 
-        return VerificationServiceFactory::createFromRequestResponse(
+        return VerificationServiceFactory::createFromCustomerVerificationResponse(
             $this->request(array_filter($params), 'https://api.skrill.com/mqi/customer-verifications', 'json')
         );
     }
