@@ -52,17 +52,17 @@ final class Address
     public function __construct(string $postCode = '', string $country = '', string $address = '')
     {
         $postCode = trim(preg_replace('/(\s+)/msi', '', $postCode));
-        if ($postCode && $this->validateAlphaNum($postCode)) {
+        if (!empty($postCode) && $this->validateAlphaNum($postCode)) {
             $this->postCode = $postCode;
         }
 
         $country = trim($country);
-        if ($country && ($country = $this->validateCountry($country))) {
+        if (!empty($country) && ($country = $this->validateCountry($country))) {
             $this->country = $country;
         }
 
         $address = trim($address);
-        if ($address && $this->validateAddress($address)) {
+        if (!empty($address) && $this->validateAddress($address)) {
             // Non‐alphanumeric characters such as spaces and commas are not supported and will return NO_MATCH
             preg_match('/\S+(?<!\W)/', trim($address), $match);
             $this->houseNumber = $match[0];
@@ -145,5 +145,4 @@ final class Address
     {
         return (bool)preg_match('/^([a-z0-9])+$/i', $value);
     }
-
 }

@@ -30,7 +30,7 @@ final class DateOfBirth
     public function __construct(string $value = null)
     {
         $this->value = '';
-        if ($value && $this->validateDateBefore(trim($value), '-18 YEARS')) {
+        if (!empty($value) && $this->validateDateBefore(trim($value), '-18 YEARS')) {
             $this->value = (new \DateTime(trim($value)))->format('Ymd');
         }
     }
@@ -43,8 +43,6 @@ final class DateOfBirth
      */
     protected function validateDateBefore($vtime, $ptime)
     {
-        $vtime = ($vtime instanceof \DateTime) ? $vtime->getTimestamp() : strtotime($vtime);
-        $ptime = ($ptime instanceof \DateTime) ? $ptime->getTimestamp() : strtotime($ptime);
-
-        return $vtime < $ptime;
-    }}
+        return strtotime($vtime) < strtotime($ptime);
+    }
+}
