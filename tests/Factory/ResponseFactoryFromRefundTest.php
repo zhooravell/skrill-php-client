@@ -36,9 +36,9 @@ class ResponseFactoryFromRefundTest extends TestCase
         $response = ResponseFactory::createFromRefundResponse($this->response);
 
         self::assertEquals(1, $response->get('mb_amount'));
-        self::assertEquals('USD', $response->get('mb_currency'));
-        self::assertEquals('e40a8e22-016e-4687-870c-f073631e3131', $response->get('transaction_id'));
-        self::assertEquals(2, $response->get('status'));
+        self::assertSame('USD', $response->get('mb_currency'));
+        self::assertSame('e40a8e22-016e-4687-870c-f073631e3131', $response->get('transaction_id'));
+        self::assertSame('2', $response->get('status'));
         self::assertNull($response->get('error'));
     }
 
@@ -84,10 +84,10 @@ class ResponseFactoryFromRefundTest extends TestCase
         $response = ResponseFactory::createFromRefundResponse($this->response);
 
         self::assertEquals(1, $response->get('mb_amount'));
-        self::assertEquals('USD', $response->get('mb_currency'));
-        self::assertEquals('e40a8e22-016e-4687-870c-f073631e3131', $response->get('transaction_id'));
-        self::assertEquals(2, $response->get('status'));
-        self::assertEquals('ALREADY_REFUNDED', $response->get('error'));
+        self::assertSame('USD', $response->get('mb_currency'));
+        self::assertSame('e40a8e22-016e-4687-870c-f073631e3131', $response->get('transaction_id'));
+        self::assertSame('2', $response->get('status'));
+        self::assertSame('ALREADY_REFUNDED', $response->get('error'));
     }
 
     /**

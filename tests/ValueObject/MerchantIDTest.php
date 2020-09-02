@@ -14,7 +14,7 @@ class MerchantIDTest extends TestCase
 {
     public function testSuccess()
     {
-        self::assertEquals(111, (new MerchantID(111))->getValue());
-        self::assertEquals(222, (new MerchantID(222))->getValue());
+        self::assertSame(111, (new MerchantID(111))->getValue());
+        self::assertSame(222, (new MerchantID(222))->getValue());
     }
 }

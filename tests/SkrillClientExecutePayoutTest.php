@@ -63,14 +63,14 @@ class SkrillClientExecutePayoutTest extends TestCase
 
         $result = $client->executePayout(SidFactory::createFromString('test-sid'));
 
-        self::assertEquals('2451071245', $result->get('id'));
+        self::assertSame('2451071245', $result->get('id'));
         self::assertCount(1, $container); // should be one request
         /** @var Request $request */
         $request = $container[0]['request'];
         self::assertInstanceOf(Request::class, $request);
-        self::assertEquals('POST', $request->getMethod());
-        self::assertEquals('https://www.skrill.com/app/pay.pl', $request->getUri());
-        self::assertEquals('action=transfer&sid=test-sid', $request->getBody()->getContents());
+        self::assertSame('POST', $request->getMethod());
+        self::assertSame('https://www.skrill.com/app/pay.pl', (string)$request->getUri());
+        self::assertSame('action=transfer&sid=test-sid', $request->getBody()->getContents());
     }
 
     /**

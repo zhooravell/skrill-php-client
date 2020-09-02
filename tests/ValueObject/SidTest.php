@@ -22,7 +22,7 @@ class SidTest extends StringValueObjectTestCase
     {
         $value = 'test123';
 
-        self::assertEquals($value, new Sid($value, new DateTimeImmutable()));
+        self::assertSame($value, (string)(new Sid($value, new DateTimeImmutable())));
     }
 
     /**

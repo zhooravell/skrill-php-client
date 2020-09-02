@@ -40,6 +40,6 @@ class SHA2SignatureCalculatorTest extends TestCase
 
         $calculator = new SHA2SignatureCalculator($secretWord, $merchantId, $formatter);
 
-        self::assertEquals($expected, (string) $calculator->calculate($transactionId, $amount, $status));
+        self::assertSame($expected, (string) $calculator->calculate($transactionId, $amount, $status));
     }
 }

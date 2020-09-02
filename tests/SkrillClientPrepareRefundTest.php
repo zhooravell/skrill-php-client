@@ -61,9 +61,9 @@ class SkrillClientPrepareRefundTest extends TestCase
         $client = new Client(['handler' => $this->successRefundMockHandler]);
         $client = new SkrillClient($client, new Email('test@test.com'), new Password('q1234567'));
 
-        $sid = $client->prepareRefund(new RefundRequest(new TransactionID('test')));
+        $sid = (string)$client->prepareRefund(new RefundRequest(new TransactionID('test')));
 
-        self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', $sid);
+        self::assertSame('5e281d1376d92ba789ca7f0583e045d4', $sid);
     }
 
     /**

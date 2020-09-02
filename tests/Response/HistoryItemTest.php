@@ -1,6 +1,6 @@
 <?php
 
-namespace Centrobill\Skrill\Tests\Response;
+namespace Skrill\Tests\Response;
 
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
@@ -47,17 +47,17 @@ class HistoryItemTest extends TestCase
         );
 
         self::assertEquals($time, $item->getTime());
-        self::assertEquals($type, $item->getType());
-        self::assertEquals($details, $item->getDetails());
-        self::assertEquals($lesion, $item->getLesion());
-        self::assertEquals($profit, $item->getProfit());
-        self::assertEquals($status, $item->getStatus());
-        self::assertEquals($balance, $item->getBalance());
-        self::assertEquals($reference, $item->getReference());
-        self::assertEquals($amount, $item->getAmount());
-        self::assertEquals($currency, $item->getCurrency());
-        self::assertEquals($info, $item->getInfo());
-        self::assertEquals($skrillId, $item->getSkrillId());
-        self::assertEquals($paymentType, $item->getPaymentType());
+        self::assertSame($type, $item->getType());
+        self::assertSame($details, $item->getDetails());
+        self::assertSame($lesion, $item->getLesion());
+        self::assertSame($profit, $item->getProfit());
+        self::assertSame($status, $item->getStatus());
+        self::assertSame($balance, $item->getBalance());
+        self::assertSame($reference, $item->getReference());
+        self::assertSame($amount, $item->getAmount());
+        self::assertSame($currency, $item->getCurrency());
+        self::assertSame($info, $item->getInfo());
+        self::assertSame($skrillId, $item->getSkrillId());
+        self::assertSame($paymentType, $item->getPaymentType());
     }
 }

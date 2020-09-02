@@ -37,10 +37,10 @@ class ResponseFactoryFromTransferTest extends TestCase
         $response = ResponseFactory::createFromTransferResponse($this->response);
 
         self::assertEquals(0.50, $response->get('amount'));
-        self::assertEquals('USD', $response->get('currency'));
-        self::assertEquals(2451071245, $response->get('id'));
-        self::assertEquals(2, $response->get('status'));
-        self::assertEquals('processed', $response->get('status_msg'));
+        self::assertSame('USD', $response->get('currency'));
+        self::assertSame('2451071245', $response->get('id'));
+        self::assertSame('2', $response->get('status'));
+        self::assertSame('processed', $response->get('status_msg'));
     }
 
     /**
@@ -85,10 +85,10 @@ class ResponseFactoryFromTransferTest extends TestCase
         $response = ResponseFactory::createFromTransferResponse($this->response);
 
         self::assertEquals(0.50, $response->get('amount'));
-        self::assertEquals('USD', $response->get('currency'));
-        self::assertEquals(2451071245, $response->get('id'));
-        self::assertEquals(-2, $response->get('status'));
-        self::assertEquals('BALANCE_NOT_ENOUGH', $response->get('error_msg'));
+        self::assertSame('USD', $response->get('currency'));
+        self::assertSame('2451071245', $response->get('id'));
+        self::assertSame('-2', $response->get('status'));
+        self::assertSame('BALANCE_NOT_ENOUGH', $response->get('error_msg'));
     }
 
     /**

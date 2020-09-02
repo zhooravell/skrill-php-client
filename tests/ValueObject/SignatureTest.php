@@ -20,7 +20,7 @@ class SignatureTest extends StringValueObjectTestCase
         $value = strtoupper(md5('test123'));
         $signature = new Signature($value);
 
-        self::assertEquals($value, $signature);
+        self::assertSame($value, (string)$signature);
         self::assertTrue($signature->equalToString($value));
         self::assertFalse($signature->equalToString('test'));
     }

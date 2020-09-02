@@ -60,7 +60,7 @@ class SkrillClientExecuteOnDemandTest extends TestCase
 
         $result = $client->executeOnDemand(SidFactory::createFromString('test-sid'));
 
-        self::assertEquals('2451071245', $result->get('id'));
+        self::assertSame('2451071245', $result->get('id'));
     }
 
     /**
