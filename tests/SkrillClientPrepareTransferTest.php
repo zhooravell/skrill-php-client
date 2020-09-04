@@ -69,7 +69,7 @@ class SkrillClientPrepareTransferTest extends TestCase
 
         $sid = $client->prepareTransfer($request);
 
-        self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', $sid);
+        self::assertSame('5e281d1376d92ba789ca7f0583e045d4', (string)$sid);
     }
 
     /**

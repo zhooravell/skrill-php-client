@@ -20,7 +20,7 @@ class SecretWordTest extends StringValueObjectTestCase
     {
         $value = 'test123';
 
-        self::assertEquals($value, new SecretWord($value));
+        self::assertSame($value, (string)(new SecretWord($value)));
     }
 
     /**
@@ -28,7 +28,7 @@ class SecretWordTest extends StringValueObjectTestCase
      */
     public function testSuccess2()
     {
-        self::assertEquals('test123', new SecretWord(' test123 '));
+        self::assertSame('test123', (string)(new SecretWord(' test123 ')));
     }
 
     /**

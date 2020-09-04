@@ -59,7 +59,7 @@ class SkrillClientExecuteRefundTest extends TestCase
 
         $result = $client->executeRefund(SidFactory::createFromString('test-sid'));
 
-        self::assertEquals('e40a8e22-016e-4687-870c-f073631e3131', $result->get('transaction_id'));
+        self::assertSame('e40a8e22-016e-4687-870c-f073631e3131', $result->get('transaction_id'));
     }
 
     /**

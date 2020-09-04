@@ -67,9 +67,9 @@ class SkrillClientViewHistoryTest extends TestCase
         /** @var Request $request */
         $request = $container[0]['request'];
         self::assertInstanceOf(Request::class, $request);
-        self::assertEquals('POST', $request->getMethod());
-        self::assertEquals('https://www.skrill.com/app/query.pl', $request->getUri());
-        self::assertEquals(
+        self::assertSame('POST', $request->getMethod());
+        self::assertSame('https://www.skrill.com/app/query.pl', (string)$request->getUri());
+        self::assertSame(
             'email=test%40test.com&password=3ade3fd6e8eef84f2ea91f6474be10d9&action=history&start_date=01-01-2018',
             $request->getBody()->getContents()
         );

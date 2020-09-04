@@ -19,7 +19,7 @@ class PasswordTest extends StringValueObjectTestCase
     {
         $value = 'a1234567';
 
-        self::assertEquals($value, new Password($value));
+        self::assertSame($value, (string)(new Password($value)));
     }
 
     /**
@@ -27,7 +27,7 @@ class PasswordTest extends StringValueObjectTestCase
      */
     public function testSuccess2()
     {
-        self::assertEquals('a1234567', new Password(' a1234567 '));
+        self::assertSame('a1234567', (string)(new Password(' a1234567 ')));
     }
 
     /**

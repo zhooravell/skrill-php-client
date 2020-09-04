@@ -107,7 +107,7 @@ class SkrillClientPrepareSaleTest extends TestCase
             )
         );
 
-        self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', (string)$sid);
+        self::assertSame('5e281d1376d92ba789ca7f0583e045d4', (string)$sid);
     }
 
     /**

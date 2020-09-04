@@ -21,7 +21,7 @@ class CompanyNameTest extends TestCase
         $value = 'test123';
         $authKey = new CompanyName($value);
 
-        self::assertEquals($value, $authKey);
+        self::assertSame($value, (string)$authKey);
     }
 
     /**
@@ -32,7 +32,7 @@ class CompanyNameTest extends TestCase
         $value = str_repeat('a', 30);
         $authKey = new CompanyName($value);
 
-        self::assertEquals($value, $authKey);
+        self::assertSame($value, (string)$authKey);
     }
 
     /**
@@ -42,7 +42,7 @@ class CompanyNameTest extends TestCase
     {
         $authKey = new CompanyName(' test123 ');
 
-        self::assertEquals('test123', $authKey);
+        self::assertSame('test123', (string)$authKey);
     }
 
     /**

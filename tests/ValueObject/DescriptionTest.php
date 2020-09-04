@@ -21,8 +21,8 @@ class DescriptionTest extends StringValueObjectTestCase
         $text = '4509334';
         $productDescription = new Description($desc, $text);
 
-        self::assertEquals($desc, $productDescription->getSubject());
-        self::assertEquals($text, $productDescription->getText());
+        self::assertSame($desc, $productDescription->getSubject());
+        self::assertSame($text, $productDescription->getText());
     }
 
     /**
