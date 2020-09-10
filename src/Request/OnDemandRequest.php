@@ -27,9 +27,9 @@ final class OnDemandRequest
     public function __construct(RecurringPaymentID $paymentId, TransactionID $transactionId, Money $amount)
     {
         $this->payload = [
-            'frn_trn_id' => strval($transactionId),
-            'rec_payment_id' => strval($paymentId),
-            'currency' => strval($amount->getCurrency()),
+            'frn_trn_id' => (string)$transactionId,
+            'rec_payment_id' => (string)$paymentId,
+            'currency' => (string)$amount->getCurrency(),
             'amount' => $this->formatToFloat($amount),
         ];
     }
@@ -41,7 +41,7 @@ final class OnDemandRequest
      */
     public function setStatusUrl(Url $url): self
     {
-        $this->payload['ondemand_status_url'] = strval($url);
+        $this->payload['ondemand_status_url'] = (string)$url;
 
         return $this;
     }

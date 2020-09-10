@@ -23,18 +23,27 @@ final class InvalidSecretWordException extends Exception implements SkrillExcept
     /**
      * @return InvalidSecretWordException
      */
-    public static function invalidMaxLength(): self
+    public static function invalidMinLength(): self
     {
-        return new self(
-            sprintf('The length of Skrill secret word should not exceed %d characters.', SecretWord::MAX_LENGTH)
-        );
+        return new self(sprintf(
+            'The length of Skrill Secret Word is too short. It should have %d characters or more.',
+            SecretWord::MIN_LENGTH
+        ));
     }
 
     /**
      * @return InvalidSecretWordException
      */
-    public static function specialCharacters(): self
+    public static function missingLetters(): self
     {
-        return new self('Special characters are not permitted in Skrill secret word.');
+        return new self('Skrill Secret Word must include at least one letter.');
+    }
+
+    /**
+     * @return InvalidSecretWordException
+     */
+    public static function missingNonAlphabetic(): self
+    {
+        return new self('Skrill Secret Word must include at least one non-alphabetic character.');
     }
 }

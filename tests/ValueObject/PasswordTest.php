@@ -17,7 +17,7 @@ class PasswordTest extends StringValueObjectTestCase
      */
     public function testSuccess()
     {
-        $value = 'a1234567';
+        $value = 'ps_wefghjylpg';
 
         self::assertSame($value, (string)(new Password($value)));
     }
@@ -27,7 +27,7 @@ class PasswordTest extends StringValueObjectTestCase
      */
     public function testSuccess2()
     {
-        self::assertSame('a1234567', (string)(new Password(' a1234567 ')));
+        self::assertEquals('ps_wefghjylpg', new Password(' ps_wefghjylpg '));
     }
 
     /**
@@ -73,7 +73,7 @@ class PasswordTest extends StringValueObjectTestCase
     public function testMissingNumbers()
     {
         $this->expectException(InvalidPasswordException::class);
-        $this->expectExceptionMessage('Skrill API/MQI password must include at least one number.');
+        $this->expectExceptionMessage('Skrill API/MQI password must include at least one non-alphabetic character.');
 
         new Password('qwertyui');
     }

@@ -43,10 +43,10 @@ final class SidFactory
         $xml = new SimpleXMLElement($response->getBody()->getContents());
 
         if ($xml->xpath('error/error_msg')) {
-            throw SkrillResponseException::fromSkillError((strval($xml->error->error_msg)));
+            throw SkrillResponseException::fromSkillError(((string)$xml->error->error_msg));
         }
 
-        return self::createFromString(strval($xml->sid));
+        return self::createFromString((string)$xml->sid);
     }
 
     /**

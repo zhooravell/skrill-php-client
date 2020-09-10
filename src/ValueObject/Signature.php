@@ -43,6 +43,6 @@ final class Signature
      */
     public function equalToString($string): bool
     {
-        return $string == strval($this->value);
+        return $string == (string) $this->value;
     }
 }

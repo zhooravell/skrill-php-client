@@ -33,8 +33,8 @@ final class InvalidPasswordException extends Exception implements SkrillExceptio
     /**
      * @return InvalidPasswordException
      */
-    public static function missingNumbers(): self
+    public static function missingNonAlphabetic(): self
     {
-        return new self('Skrill API/MQI password must include at least one number.');
+        return new self('Skrill API/MQI password must include at least one non-alphabetic character.');
     }
 }

@@ -27,7 +27,7 @@ final class RefundRequest
     public function __construct(TransactionID $transactionId, Money $amount = null)
     {
         $this->payload = [
-            'transaction_id' => strval($transactionId),
+            'transaction_id' => (string)$transactionId,
         ];
 
         if (null != $amount) {
@@ -42,7 +42,7 @@ final class RefundRequest
      */
     public function setStatusUrl(Url $url): self
     {
-        $this->payload['refund_status_url'] = strval($url);
+        $this->payload['refund_status_url'] = (string)$url;
 
         return $this;
     }

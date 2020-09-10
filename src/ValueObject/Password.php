@@ -40,8 +40,8 @@ final class Password
             throw InvalidPasswordException::missingLetters();
         }
 
-        if (!preg_match('/\pN/u', $value)) {
-            throw InvalidPasswordException::missingNumbers();
+        if (!preg_match('/[^a-z]/ui', $value)) {
+            throw InvalidPasswordException::missingNonAlphabetic();
         }
 
         $this->value = $value;

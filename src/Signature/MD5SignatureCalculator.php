@@ -51,7 +51,7 @@ final class MD5SignatureCalculator implements SignatureCalculator
         return new Signature(strtoupper(md5(implode([
             $this->merchantId->getValue(),
             $transactionId,
-            strtoupper(md5(strval($this->secretWord))),
+            strtoupper(md5((string)$this->secretWord)),
             $this->moneyFormatter->format($amount),
             $amount->getCurrency(),
             $status,

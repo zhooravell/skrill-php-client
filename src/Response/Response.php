@@ -31,12 +31,12 @@ final class Response
      * Get an item using "dot" notation.
      * Examples: $res->get("user.id");.
      *
-     * @param string $key
+     * @param string|null $key
      * @param mixed  $default
      *
      * @return mixed
      */
-    public function get(string $key, $default = null)
+    public function get(?string $key = null, $default = null)
     {
         if (0 === count($this->data)) {
             return $default;
