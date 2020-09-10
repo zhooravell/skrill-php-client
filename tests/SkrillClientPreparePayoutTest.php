@@ -67,9 +67,9 @@ class SkrillClientPreparePayoutTest extends TestCase
             new Description('subj', 'text')
         );
 
-        $sid = $client->preparePayout($request);
+        $sid = (string)$client->preparePayout($request);
 
-        self::assertEquals('5e281d1376d92ba789ca7f0583e045d4', $sid);
+        self::assertSame('5e281d1376d92ba789ca7f0583e045d4', $sid);
     }
 
     /**

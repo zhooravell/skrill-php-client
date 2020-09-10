@@ -30,7 +30,7 @@ class HelpersTest extends TestCase
         $countryLists = array_keys($countries);
 
         foreach ($countryLists as $country) {
-            self::assertEquals(3, mb_strlen($country));
+            self::assertSame(3, mb_strlen($country));
         }
 
         self::assertArrayNotHasKey('CUB', $countries);
@@ -58,7 +58,7 @@ class HelpersTest extends TestCase
         $languageLists = array_keys($languages);
 
         foreach ($languageLists as $language) {
-            self::assertEquals(2, mb_strlen($language));
+            self::assertSame(2, mb_strlen($language));
         }
     }
 

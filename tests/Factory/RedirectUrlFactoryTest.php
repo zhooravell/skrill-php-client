@@ -17,7 +17,7 @@ class RedirectUrlFactoryTest extends TestCase
      */
     public function testSuccess()
     {
-        self::assertEquals(
+        self::assertSame(
             'https://pay.skrill.com/?sid=6d7d0005655018a3ef7abd043ee31cfd',
             RedirectUrlFactory::fromSid(SidFactory::createFromString('6d7d0005655018a3ef7abd043ee31cfd'))
         );
