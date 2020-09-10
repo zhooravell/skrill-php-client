@@ -41,6 +41,6 @@ class MD5SignatureCalculatorTest extends TestCase
 
         $calculator = new MD5SignatureCalculator($secretWord, $merchantId, $formatter);
 
-        self::assertEquals($expected, (string) $calculator->calculate($transactionId, $amount, $status));
+        self::assertSame($expected, (string) $calculator->calculate($transactionId, $amount, $status));
     }
 }

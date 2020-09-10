@@ -23,7 +23,7 @@ class LanguageTest extends TestCase
      */
     public function testSuccess(string $value)
     {
-        self::assertEquals($value, new Language($value));
+        self::assertSame($value, (string)(new Language($value)));
     }
 
     /**
@@ -31,7 +31,7 @@ class LanguageTest extends TestCase
      */
     public function testSuccess2()
     {
-        self::assertEquals('FR', new Language('FR '));
+        self::assertSame('FR', (string)(new Language('FR ')));
     }
 
     /**

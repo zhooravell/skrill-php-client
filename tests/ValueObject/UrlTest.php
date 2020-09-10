@@ -34,7 +34,7 @@ class UrlTest extends StringValueObjectTestCase
     {
         $url = 'https://api.com';
 
-        self::assertEquals($url, new Url($url));
+        self::assertSame($url, (string)(new Url($url)));
     }
 
     /**
@@ -42,7 +42,7 @@ class UrlTest extends StringValueObjectTestCase
      */
     public function testSuccess2()
     {
-        self::assertEquals('https://api.com', new Url(' https://api.com '));
+        self::assertSame('https://api.com', (string)(new Url(' https://api.com ')));
     }
 
     /**

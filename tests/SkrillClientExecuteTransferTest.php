@@ -59,7 +59,7 @@ class SkrillClientExecuteTransferTest extends TestCase
 
         $result = $client->executeTransfer(SidFactory::createFromString('test-sid'));
 
-        self::assertEquals('2451071245', $result->get('id'));
+        self::assertSame('2451071245', $result->get('id'));
     }
 
     /**

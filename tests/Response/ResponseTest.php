@@ -163,7 +163,7 @@ class ResponseTest extends TestCase
         $userId = 111;
         $response = new Response(['userId' => $userId]);
 
-        self::assertEquals($userId, $response->userId);
+        self::assertSame($userId, $response->userId);
     }
 
     public function testGetNotExistsPropertyValue()
@@ -186,9 +186,9 @@ class ResponseTest extends TestCase
         ]);
 
         self::assertNull($response->get('address.street_2'));
-        self::assertEquals($street, $response->get('address.street'));
-        self::assertEquals($userId, $response->userId);
-        self::assertEquals($userId, $response->get('userId'));
+        self::assertSame($street, $response->get('address.street'));
+        self::assertSame($userId, $response->userId);
+        self::assertSame($userId, $response->get('userId'));
         self::assertEquals(['street' => $street], $response->address);
     }
 }

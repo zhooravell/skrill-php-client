@@ -19,7 +19,7 @@ class TransactionIDTest extends StringValueObjectTestCase
     {
         $value = 'test123';
 
-        self::assertEquals($value, new TransactionID($value));
+        self::assertSame($value, (string)(new TransactionID($value)));
     }
 
     /**
@@ -27,7 +27,7 @@ class TransactionIDTest extends StringValueObjectTestCase
      */
     public function testSuccess2()
     {
-        self::assertEquals('test123', new TransactionID(' test123 '));
+        self::assertSame('test123', (string)(new TransactionID(' test123 ')));
     }
 
     /**

@@ -19,7 +19,7 @@ class RecurringBillingNoteTest extends StringValueObjectTestCase
     {
         $value = 'test123';
 
-        self::assertEquals($value, new RecurringBillingNote($value));
+        self::assertSame($value, (string)(new RecurringBillingNote($value)));
     }
 
     /**
@@ -27,7 +27,7 @@ class RecurringBillingNoteTest extends StringValueObjectTestCase
      */
     public function testSuccess2()
     {
-        self::assertEquals('test123', new RecurringBillingNote(' test123 '));
+        self::assertSame('test123', (string)(new RecurringBillingNote(' test123 ')));
     }
 
     /**

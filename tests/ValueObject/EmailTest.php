@@ -20,7 +20,7 @@ class EmailTest extends TestCase
     {
         $value = 'test@test.com';
 
-        self::assertEquals($value, new Email($value));
+        self::assertSame($value, (string)(new Email($value)));
     }
 
     /**
@@ -28,7 +28,7 @@ class EmailTest extends TestCase
      */
     public function testSuccess2()
     {
-        self::assertEquals('test@test.com', new Email(' test@test.com '));
+        self::assertSame('test@test.com', (string)(new Email(' test@test.com ')));
     }
 
     /**

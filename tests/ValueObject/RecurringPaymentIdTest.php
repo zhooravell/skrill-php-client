@@ -19,7 +19,7 @@ class RecurringPaymentIdTest extends StringValueObjectTestCase
     {
         $value = 'test123';
 
-        self::assertEquals($value, new RecurringPaymentID($value));
+        self::assertSame($value, (string)(new RecurringPaymentID($value)));
     }
 
     /**
@@ -27,7 +27,7 @@ class RecurringPaymentIdTest extends StringValueObjectTestCase
      */
     public function testSuccess2()
     {
-        self::assertEquals('test123', new RecurringPaymentID(' test123 '));
+        self::assertSame('test123', (string)(new RecurringPaymentID(' test123 ')));
     }
 
     /**
