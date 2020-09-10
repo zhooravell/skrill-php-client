@@ -15,6 +15,7 @@ class HelpersTest extends TestCase
     {
         self::assertFileExists(__DIR__ . '/../resources/iso-3166-1-alpha-3-countries-skill-supports.php');
         self::assertFileExists(__DIR__ . '/../resources/iso-6391-languages-skrill-supports.php');
+        self::assertFileExists(__DIR__ . '/../resources/convert-iso-alpha-2-to-alpha-3.php');
     }
 
     public function testGetSkillSupportsCountries()
@@ -57,6 +58,24 @@ class HelpersTest extends TestCase
         $languageLists = array_keys($languages);
 
         foreach ($languageLists as $language) {
+            self::assertEquals(2, mb_strlen($language));
+        }
+    }
+
+    public function testConvertISO()
+    {
+        self::assertTrue(function_exists('convertISO'));
+
+        $languages = convertISO();
+
+        self::assertIsArray($languages);
+        self::assertCount(250, $languages);
+
+        foreach ($languages as $language) {
+            self::assertEquals(3, mb_strlen($language));
+        }
+
+        foreach (array_keys($languages) as $language) {
             self::assertEquals(2, mb_strlen($language));
         }
     }
