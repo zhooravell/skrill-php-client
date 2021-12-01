@@ -27,6 +27,8 @@ use Skrill\Factory\HistoryItemFactory;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use Skrill\Exception\SkrillResponseException;
+use Throwable;
+use Exception;
 
 /**
  * Skrill HTTP client.
@@ -79,19 +81,20 @@ final class SkrillClient implements
     private $password;
 
     /**
-     * @param ClientInterface  $client
-     * @param Email            $merchantEmail
-     * @param Password         $password
-     * @param Url|null         $logoUrl
+     * @param ClientInterface $client
+     * @param Email $merchantEmail
+     * @param Password $password
+     * @param Url|null $logoUrl
      * @param CompanyName|null $companyName
      */
     public function __construct(
         ClientInterface $client,
-        Email $merchantEmail,
-        Password $password,
-        Url $logoUrl = null,
-        CompanyName $companyName = null
-    ) {
+        Email           $merchantEmail,
+        Password        $password,
+        Url             $logoUrl = null,
+        CompanyName     $companyName = null
+    )
+    {
         $this->client = $client;
         $this->companyName = $companyName;
         $this->merchantEmail = $merchantEmail;
@@ -293,19 +296,23 @@ final class SkrillClient implements
      *
      * @return ResponseInterface
      *
-     * @throws GuzzleException
+     * @throws Exception
      */
     private function request(array $parameters, string $url): ResponseInterface
     {
-        return $this->client->request(
-            'POST',
-            $url,
-            [
-                RequestOptions::FORM_PARAMS => $parameters,
-                RequestOptions::HEADERS => [
-                    'Accept' => 'text/xml',
-                ],
-            ]
-        );
+        try {
+            return $this->client->request(
+                'POST',
+                $url,
+                [
+                    RequestOptions::FORM_PARAMS => $parameters,
+                    RequestOptions::HEADERS => [
+                        'Accept' => 'text/xml',
+                    ],
+                ]
+            );
+        } catch (Throwable $throwable) {
+            throw new Exception($throwable->getMessage() . ' - url: ' . $url . ' - data: ' . json_encode($parameters));
+        }
     }
 }
