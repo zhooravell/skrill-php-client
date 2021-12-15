@@ -29,6 +29,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Skrill\Exception\SkrillResponseException;
 use Throwable;
 use Exception;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  * Skrill HTTP client.
@@ -311,8 +312,8 @@ final class SkrillClient implements
                     ],
                 ]
             );
-        } catch (Throwable $throwable) {
-            throw new Exception($throwable->getMessage() . ' - url: ' . $url . ' - data: ' . json_encode($parameters));
+        } catch (ClientException $clientException) {
+            throw new Exception($clientException->getMessage() . ' - url: ' . $url . ' - data: ' . json_encode($parameters) . ' - client exception: ' . $clientException->getResponse()->getBody()->getContents());
         }
     }
 }
